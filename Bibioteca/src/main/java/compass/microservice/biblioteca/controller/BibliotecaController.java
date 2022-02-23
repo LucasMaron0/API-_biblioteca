@@ -108,18 +108,5 @@ public class BibliotecaController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping("/livros/{id}")
-	public Page<LivroDto> livrosBiblioteca(@PathVariable Long id,
-			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
-		Page<Livro> livros = lRepo.findByBiblioteca_id(id, paginacao);
-		return LivroDto.converter(livros);
-	}
-
-	@GetMapping("/registros")
-	public Page<RegistroDto> registroLivros(@RequestParam(required = false) StatusRegistro statusRegistro,
-			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) {
-		Page<Registro> registros = rRepo.findByStatusRegistro(statusRegistro, paginacao);
-		return RegistroDto.converter(registros);
-	}
 
 }

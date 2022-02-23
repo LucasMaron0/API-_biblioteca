@@ -48,15 +48,12 @@ public class LivroController {
 	private BibliotecaRepository bRepo;
 	
 	
-	
 	@GetMapping
 	@Cacheable(value = "listaDeLivros")
 	public Page<LivroDto> lista(@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao) {
 
 		Page<Livro> livros = lRepo.findAll(paginacao);
-
 		return LivroDto.converter(livros);
-
 
 	}
 
@@ -70,13 +67,13 @@ public class LivroController {
 		}
 	}
 	
-	@GetMapping("/livros/{id}")
+	@GetMapping("/biblioteca/{id}")
 	public Page<LivroDto> livrosBiblioteca(	@PathVariable Long id,
 			@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao){
 
 		Page<Livro>  livros = lRepo.findByBiblioteca_id(id,paginacao);
-
-
+		
+		
 		return LivroDto.converter(livros);
 	}
 	

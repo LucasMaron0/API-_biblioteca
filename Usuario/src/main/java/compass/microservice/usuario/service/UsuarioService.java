@@ -1,5 +1,6 @@
 package compass.microservice.usuario.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -45,9 +46,9 @@ public class UsuarioService {
 		return retorno;
 	}
 
-	public Page<LivroDto> listarLivros(Long id) {
+	public List<LivroDto> listarLivros(Long id) {
 		
-		Page<LivroDto>listarLivros = bClient.listarLivros(id);
+		List<LivroDto>listarLivros = bClient.listarLivros(id);
 		
 		return listarLivros;
 	}

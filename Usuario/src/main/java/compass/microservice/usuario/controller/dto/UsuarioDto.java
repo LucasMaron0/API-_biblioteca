@@ -2,6 +2,7 @@ package compass.microservice.usuario.controller.dto;
 
 import org.springframework.data.domain.Page;
 
+import compass.microservice.usuario.modelo.Estado;
 import compass.microservice.usuario.modelo.Usuario;
 
 public class UsuarioDto {
@@ -11,7 +12,7 @@ public class UsuarioDto {
 	
 	private String nome;
 
-	private String estado;
+	private Estado estado;
 
 	private String cidade;
 
@@ -57,13 +58,6 @@ public class UsuarioDto {
 		this.nome = nome;
 	}
 
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
 
 	public String getCidade() {
 		return cidade;
@@ -105,9 +99,19 @@ public class UsuarioDto {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
 
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+	
+	
+	
 
 
 }

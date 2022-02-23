@@ -1,5 +1,7 @@
 package compass.microservice.usuario.client;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.cloud.openfeign.FeignClient;
@@ -25,7 +27,7 @@ public interface BibliotecaClient {
 	RetornoPedidoDto pedirLivros(@Valid PedirLivroForm form);
 
 	@RequestMapping(method = RequestMethod.POST, value = "/service/listarLivros")
-	Page<LivroDto> listarLivros(Long id);
+	List<LivroDto> listarLivros(Long id);
 	
 
 

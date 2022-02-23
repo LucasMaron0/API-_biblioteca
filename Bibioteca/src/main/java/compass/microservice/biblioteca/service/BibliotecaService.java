@@ -1,18 +1,25 @@
 package compass.microservice.biblioteca.service;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 
 
 import compass.microservice.biblioteca.client.UsuarioClient;
 import compass.microservice.biblioteca.controller.BibliotecaController;
+import compass.microservice.biblioteca.controller.LivroController;
 import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
@@ -30,7 +37,7 @@ import compass.microservice.biblioteca.repository.RegistroRepository;
 
 @Service
 public class BibliotecaService {
-	
+
 	//recebe e manda requests para o  usuario
 
 	@Autowired
@@ -44,9 +51,9 @@ public class BibliotecaService {
 
 	@Autowired
 	private UsuarioClient uClient;
-	
+
 	@Autowired 
-	private BibliotecaController bController;
+	private LivroController lController;
 
 
 	//Manda
@@ -57,7 +64,7 @@ public class BibliotecaService {
 		if(optRegistro.isEmpty()) {
 			return ResponseEntity.badRequest().body("Este registro não existe");
 		}
-		
+
 		Registro registro = optRegistro.get();
 		List<Livro> livros = registro.getLivros();
 
@@ -70,16 +77,16 @@ public class BibliotecaService {
 		registro.setStatusRegistro(StatusRegistro.FINALIZADO);
 
 		EncerrarPedidoDto encPedido = new EncerrarPedidoDto(registro.getIdUsuario(), registro.getId(),"encerrado");
-		
+
 		boolean b = uClient.encerrarRegistro(encPedido);
-		
+
 		if(b) {
 			return ResponseEntity.ok(encPedido);
 		}else {
 			return ResponseEntity.ok("erro");
 		}
-		
-		
+
+
 	}
 
 
@@ -167,9 +174,10 @@ public class BibliotecaService {
 
 
 
-	public Page<LivroDto> listarLivros(Long id) {
-		Page<LivroDto> livrosBiblioteca = bController.livrosBiblioteca(id, null) ;
-		return livrosBiblioteca;
+	public List<LivroDto> listarLivros(Long id) {
+		Page<LivroDto> livrosBiblioteca = lController.livrosBiblioteca(id,null);
+		
+		return livrosBiblioteca.getContent();
 	}
 
 

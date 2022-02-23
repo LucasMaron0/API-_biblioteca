@@ -1,13 +1,13 @@
 package compass.microservice.usuario.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -114,19 +114,19 @@ public class UsuarioController {
 	@PostMapping("/pedido")
 	@Transactional
 	public ResponseEntity<?> pedirlivro(@RequestBody @Valid PedirLivroForm form){
-		
+
 		Optional<Usuario> optional = uRepo.findById(form.getIdUser());
 
 		if(optional.isPresent()) {
 			RetornoPedidoDto retorno = uService.pedirLivros(form);
 
 			if (retorno.getStatus().equals("Pedido Realizado com sucesso")) {
-				
+
 				int numeroPedidos = optional.get().getNumeroDePedidos() + 1;
 				optional.get().setNumeroDePedidos(numeroPedidos);
 				return ResponseEntity.ok().body(retorno);
 			}else {
-				
+
 				return ResponseEntity.ok().body(retorno);
 			}
 		}
@@ -134,12 +134,10 @@ public class UsuarioController {
 		return ResponseEntity.badRequest().body("Usuario não existe");
 
 	}
-	
-	@GetMapping("/livros/{id}")
-	public Page<LivroDto> livrosBiblioteca(	@PathVariable Long id,
-			@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao){
-		Page<LivroDto> listaDeLivros = uService.listarLivros(id);
 
-		return null;
+	@GetMapping("/livros/{id}")
+	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
+
+		return uService.listarLivros(id);
 	}
 }
