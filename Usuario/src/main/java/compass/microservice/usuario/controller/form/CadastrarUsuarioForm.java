@@ -1,6 +1,7 @@
 package compass.microservice.usuario.controller.form;
 
 import compass.microservice.usuario.modelo.Endereco;
+import compass.microservice.usuario.modelo.Estado;
 import compass.microservice.usuario.modelo.Usuario;
 
 public class CadastrarUsuarioForm {
@@ -9,7 +10,7 @@ public class CadastrarUsuarioForm {
 
 	private String nome;
 
-	private String estado;
+	private Estado estado;
 
 	private String cidade;
 
@@ -64,13 +65,6 @@ public class CadastrarUsuarioForm {
 		this.nome = nome;
 	}
 
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
 
 	public String getCidade() {
 		return cidade;
@@ -105,6 +99,16 @@ public class CadastrarUsuarioForm {
 	}
 
 
+	public Estado getEstado() {
+		return estado;
+	}
+
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
+	
 
 
 

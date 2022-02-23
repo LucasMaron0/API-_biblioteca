@@ -1,6 +1,8 @@
 package compass.microservice.usuario.modelo;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;			
 import javax.persistence.Id;
@@ -20,8 +22,8 @@ public class Endereco {
 	@JoinColumn(name = "usuario_id", referencedColumnName = "id")
 	private Usuario usuario;
 
-
-	private String estado;
+	@Enumerated(EnumType.STRING)
+	private Estado estado;
 
 	private String cidade;
 
@@ -35,7 +37,7 @@ public class Endereco {
 
 	}
 
-	public Endereco( Usuario usuario, String estado, String cidade, String bairro, String rua, int numero) {
+	public Endereco( Usuario usuario, Estado estado, String cidade, String bairro, String rua, int numero) {
 		this.usuario = usuario;
 		this.estado = estado;
 		this.cidade = cidade;
@@ -62,13 +64,6 @@ public class Endereco {
 		this.usuario = usuario;
 	}
 
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
 
 	public String getCidade() {
 		return cidade;
@@ -102,8 +97,16 @@ public class Endereco {
 		this.numero = numero;
 	}
 
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
 
 
+	
 
 
 

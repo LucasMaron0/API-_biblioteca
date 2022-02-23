@@ -1,5 +1,7 @@
 package compass.microservice.biblioteca.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
@@ -37,7 +39,7 @@ public class BibliotecaServiceController {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/listarLivros")	
-	public Page<LivroDto> listarLivros(@RequestBody Long id) {				
+	public List<LivroDto> listarLivros(@RequestBody Long id) {				
 		return bService.listarLivros(id);
 	}
 

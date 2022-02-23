@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.data.domain.Page;
 
+
+
 public class LivroDto {
 
 	private Long id;
@@ -12,6 +14,16 @@ public class LivroDto {
 	private String categoria;
 	private String editora;
 	private LocalDate lançamento;
+
+	private String biblioteca;
+
+
+
+
+
+	public LivroDto() {
+		super();
+	}
 
 	public Long getId() {
 		return id;
@@ -37,14 +49,6 @@ public class LivroDto {
 		this.autor = autor;
 	}
 
-	public String getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
-	}
-
 	public String getEditora() {
 		return editora;
 	}
@@ -61,9 +65,26 @@ public class LivroDto {
 		this.lançamento = lançamento;
 	}
 
+	public String getBiblioteca() {
+		return biblioteca;
+	}
+
+	public void setBiblioteca(String biblioteca) {
+		this.biblioteca = biblioteca;
+	}
+
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+
 
 	
-	
+
+
 
 
 

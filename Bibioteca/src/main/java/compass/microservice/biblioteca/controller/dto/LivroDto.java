@@ -9,10 +9,6 @@ import compass.microservice.biblioteca.modelos.Livro;
 
 public class LivroDto {
 
-
-
-
-
 	private Long id;
 	private String nome;
 	private String autor;

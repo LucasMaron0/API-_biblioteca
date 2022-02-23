@@ -3,6 +3,7 @@ package compass.microservice.biblioteca.controller.dto;
 import org.springframework.data.domain.Page;
 
 import compass.microservice.biblioteca.modelos.Biblioteca;
+import compass.microservice.biblioteca.modelos.Estado;
 
 
 public class BibliotecaDto {
@@ -12,7 +13,7 @@ public class BibliotecaDto {
 
 	private String nome;
 
-	private String estado;
+	private Estado estado;
 
 	private String cidade;
 
@@ -64,11 +65,11 @@ public class BibliotecaDto {
 		this.nome = nome;
 	}
 
-	public String getEstado() {
+	public Estado getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 

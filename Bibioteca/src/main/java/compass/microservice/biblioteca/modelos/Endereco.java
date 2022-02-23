@@ -1,6 +1,8 @@
 package compass.microservice.biblioteca.modelos;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,36 +23,25 @@ public class Endereco {
 	@JoinColumn(name = "biblioteca_id", referencedColumnName = "id")
 	private Biblioteca biblioteca;
 
-
-	private String estado;
-
-	private String cidade;
-
-	private String bairro;
-
 	private String rua;
-
 	private int numero;
-
+	private String bairro;
+	private String cidade;
+	@Enumerated(EnumType.STRING)
+	private Estado estado;
 	
-
+	public Endereco(Biblioteca biblioteca, String rua, int numero, String bairro, String cidade, Estado estado) {
+		this.biblioteca = biblioteca;
+		this.rua = rua;
+		this.numero = numero;
+		this.bairro = bairro;
+		this.cidade = cidade;
+		this.estado = estado;
+	}
+	
 	public Endereco() {
 		
 	}
-
-	
-
-	public Endereco( Biblioteca biblioteca, String estado, String cidade, String bairro, String rua,int numero) {
-	
-		this.biblioteca = biblioteca;
-		this.estado = estado;
-		this.cidade = cidade;
-		this.bairro = bairro;
-		this.rua = rua;
-		this.numero = numero;
-	}
-
-
 
 	public Long getId() {
 		return id;
@@ -70,11 +61,11 @@ public class Endereco {
 		this.biblioteca = biblioteca;
 	}
 
-	public String getEstado() {
+	public Estado getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 

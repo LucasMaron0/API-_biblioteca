@@ -6,6 +6,7 @@ import javax.persistence.OneToOne;
 
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Endereco;
+import compass.microservice.biblioteca.modelos.Estado;
 import compass.microservice.biblioteca.modelos.Livro;
 
 
@@ -15,7 +16,7 @@ public class CadastrarBibliotecaForm {
 	private String nome;
 	
 
-	private String estado;
+	private Estado estado;
 
 	private String cidade;
 
@@ -37,7 +38,7 @@ public class CadastrarBibliotecaForm {
 	public Biblioteca converter () {
 		
 		Biblioteca biblioteca = new Biblioteca(nome);
-		Endereco end = new Endereco( biblioteca ,estado, cidade , bairro , rua , numero);
+		Endereco end = new Endereco( biblioteca, rua, numero, bairro, cidade, estado);
 		biblioteca.setEndereco(end);
 		
 		return biblioteca;
@@ -49,11 +50,11 @@ public class CadastrarBibliotecaForm {
 		b.setNome(this.nome);
 		Endereco end = new Endereco(
 				b,
-				this.estado,
-				this.cidade,
-				this.bairro,
 				this.rua,
-				this.numero);
+				this.numero,
+				this.bairro,
+				this.cidade,
+				this.estado);
 		b.setEndereco(end);
 
 
@@ -69,11 +70,11 @@ public class CadastrarBibliotecaForm {
 		this.nome = nome;
 	}
 
-	public String getEstado() {
+	public Estado getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
 
