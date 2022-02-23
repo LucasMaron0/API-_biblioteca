@@ -105,17 +105,10 @@ public class BibliotecaController {
 	}
 	
 
-
-	
-
-
 	@GetMapping("/livros/{id}")
 	public Page<LivroDto> livrosBiblioteca(	@PathVariable Long id,
-			@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao){
-
+		@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao){
 		Page<Livro>  livros = lRepo.findByBiblioteca_id(id,paginacao);
-
-
 		return LivroDto.converter(livros);
 	}
 

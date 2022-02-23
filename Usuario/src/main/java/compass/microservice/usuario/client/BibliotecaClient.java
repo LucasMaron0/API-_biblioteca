@@ -3,9 +3,11 @@ package compass.microservice.usuario.client;
 import javax.validation.Valid;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
@@ -21,6 +23,9 @@ public interface BibliotecaClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/service/pedido")
 	RetornoPedidoDto pedirLivros(@Valid PedirLivroForm form);
+
+	@RequestMapping(method = RequestMethod.POST, value = "/service/listarLivros")
+	Page<LivroDto> listarLivros(Long id);
 	
 
 

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.dto.UsuarioDto;
@@ -132,5 +133,13 @@ public class UsuarioController {
 
 		return ResponseEntity.badRequest().body("Usuario não existe");
 
+	}
+	
+	@GetMapping("/livros/{id}")
+	public Page<LivroDto> livrosBiblioteca(	@PathVariable Long id,
+			@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao){
+		Page<LivroDto> listaDeLivros = uService.listarLivros(id);
+
+		return null;
 	}
 }

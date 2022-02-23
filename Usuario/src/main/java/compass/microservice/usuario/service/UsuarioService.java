@@ -5,10 +5,12 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import compass.microservice.usuario.client.BibliotecaClient;
 import compass.microservice.usuario.controller.dto.EncerrarPedidoDto;
+import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
@@ -43,6 +45,12 @@ public class UsuarioService {
 		return retorno;
 	}
 
+	public Page<LivroDto> listarLivros(Long id) {
+		
+		Page<LivroDto>listarLivros = bClient.listarLivros(id);
+		
+		return listarLivros;
+	}
 
 	//Recebe
 
