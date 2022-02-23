@@ -5,13 +5,16 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
 
 import compass.microservice.biblioteca.client.UsuarioClient;
+import compass.microservice.biblioteca.controller.BibliotecaController;
 import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
+import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
@@ -41,8 +44,9 @@ public class BibliotecaService {
 
 	@Autowired
 	private UsuarioClient uClient;
-
-
+	
+	@Autowired 
+	private BibliotecaController bController;
 
 
 	//Manda
@@ -161,6 +165,12 @@ public class BibliotecaService {
 
 	}
 
+
+
+	public Page<LivroDto> listarLivros(Long id) {
+		Page<LivroDto> livrosBiblioteca = bController.livrosBiblioteca(id, null) ;
+		return livrosBiblioteca;
+	}
 
 
 
