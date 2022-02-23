@@ -15,7 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class BibiotecaApplication {
 	
 	
-	//teste github 
+
 	
 	@Bean
 	@LoadBalanced
