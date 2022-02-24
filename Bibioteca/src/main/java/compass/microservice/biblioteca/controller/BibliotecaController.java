@@ -10,6 +10,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,32 +110,7 @@ public class BibliotecaController {
 		return ResponseEntity.notFound().build();
 	}
 
+
 	
-	@PostMapping("/endereço")
-	@Transactional
-	public ResponseEntity<?> endereço() throws Exception{
-
-		String apiKey = "AIzaSyBS_-kGtjTHQ2L8Zc_1yERB9XxGDyCklHY";
-		String origins= "Carazinho";
-		String destinations ="Panambi";
-		
-
-		String url = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+origins
-				+ "&destinations="+destinations  + "&key="+apiKey;
-
-		HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url)).build();
-		HttpClient client = HttpClient.newBuilder().build();
-		String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
-		
-		
-		JSONParser jp = new JSONParser();
-		JSONObject jo = (JSONObject) jp.parse(response);
-		
-
-
-		return ResponseEntity.ok(response);	
-
-	}
-
 
 }
