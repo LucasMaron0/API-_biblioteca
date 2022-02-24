@@ -45,7 +45,7 @@ public class Localizacao {
 		HttpClient client = HttpClient.newBuilder().build();
 		String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
-		System.out.println(response);
+	
 
 		JSONParser jp = new JSONParser();
 		JSONObject jo = (JSONObject) jp.parse(response);
@@ -55,19 +55,20 @@ public class Localizacao {
 
 		Long menor = null;
 		int keyMaisProxima = 0;
-		System.out.println(relacao.size());
-	
+		
+
 		for(int i = 0; i <relacao.size(); i++) {
-			System.out.println(i);
 			jo= (JSONObject) ja.get(i);
-			JSONObject je = (JSONObject) jo.get("distance");
-			Long distance = (Long) je.get("value");
+			JSONObject jd = (JSONObject) jo.get("distance");
+			String status = (String) jo.get("status");
+			if(status.equals("OK")){
+				Long distance = (Long) jd.get("value");
+				if (menor == null || distance <= menor) {
+					menor = distance;
+					keyMaisProxima = i;
 
-			if (menor == null || distance <= menor) {
-				menor = distance;
-				keyMaisProxima = i;
-
-			}	
+				}	
+			}
 		}
 
 
