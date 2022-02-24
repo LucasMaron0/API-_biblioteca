@@ -40,7 +40,7 @@ public class Livro {
 	
 	private String editora;
 	
-	private LocalDate lançamento;
+	private LocalDate lancamento;
 	
 		
 	
@@ -49,14 +49,14 @@ public class Livro {
 	}
 	
 
-	public Livro(String nome, String autor, Categoria categoria, String editora, LocalDate lançamento, Biblioteca biblioteca) {
+	public Livro(String nome, String autor, Categoria categoria, String editora, LocalDate lancamento, Biblioteca biblioteca) {
 		
 		this.biblioteca = biblioteca;
 		this.nome = nome;
 		this.autor = autor;
 		this.categoria = categoria;
 		this.editora = editora;
-		this.lançamento = lançamento;
+		this.lancamento = lancamento;
 	}
 
 
@@ -112,13 +112,13 @@ public class Livro {
 	}
 
 
-	public LocalDate getLançamento() {
-		return lançamento;
+	public LocalDate getLancamento() {
+		return lancamento;
 	}
 
 
-	public void setLançamento(LocalDate lançamento) {
-		this.lançamento = lançamento;
+	public void setLancamento(LocalDate lancamento) {
+		this.lancamento = lancamento;
 	}
 
 

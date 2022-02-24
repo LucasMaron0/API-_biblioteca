@@ -14,7 +14,7 @@ public class LivroDto {
 	private String autor;
 	private Categoria categoria;
 	private String editora;
-	private LocalDate lançamento;
+	private LocalDate lancamento;
 
 	private String biblioteca;
 
@@ -25,7 +25,7 @@ public class LivroDto {
 		this.autor = livro.getAutor();
 		this.categoria = livro.getCategoria();
 		this.editora = livro.getCategoria().toString();
-		this.lançamento= livro.getLançamento();
+		this.lancamento= livro.getLancamento();
 		this.biblioteca = livro.getBiblioteca().getNome();
 
 	}
@@ -77,11 +77,11 @@ public class LivroDto {
 	}
 
 	public LocalDate getLançamento() {
-		return lançamento;
+		return lancamento;
 	}
 
 	public void setLançamento(LocalDate lançamento) {
-		this.lançamento = lançamento;
+		this.lancamento = lançamento;
 	}
 
 	public String getBiblioteca() {
