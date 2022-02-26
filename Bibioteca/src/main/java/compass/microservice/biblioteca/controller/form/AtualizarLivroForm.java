@@ -37,7 +37,7 @@ public class AtualizarLivroForm {
 		l.setNome(nome);
 		l.setCategoria(categoria);
 		l.setEditora(editora);
-		l.setLançamento(lançamento);
+		l.setLancamento(lançamento);
 			
 		return l;
 		
