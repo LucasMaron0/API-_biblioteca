@@ -31,9 +31,6 @@ public class BibliotecaServiceController {
 	@Autowired
 	private BibliotecaService bService;
 
-	@Autowired
-	private LivrosRepository lRepository;
-
 	@RequestMapping(method = RequestMethod.POST, value = "/teste")
 	public ResponseEntity<RequestTesteDTO> teste(@RequestBody RequestTesteForm form) {
 		return bService.teste(form);
@@ -47,24 +44,6 @@ public class BibliotecaServiceController {
 	@RequestMapping(method = RequestMethod.POST, value = "/listarLivros")
 	public List<LivroDto> listarLivros(@RequestBody Long id) {
 		return bService.listarLivros(id);
-	}
-
-	@GetMapping("/nomeAutor/{autor}")
-	public ResponseEntity<LivroDto> buscarPorAutor(@PathVariable String autor) {
-		Optional<Livro> optional = lRepository.findByAutorContainingIgnoreCase(autor);
-		if (optional.isPresent()) {
-			return ResponseEntity.ok(new LivroDto(optional.get()));
-		}
-		return ResponseEntity.notFound().build();
-	}
-
-	@GetMapping("/nomeLivro/{nome}")
-	public ResponseEntity<LivroDto> buscarPorNomeLivro(@PathVariable String nome) {
-		Optional<Livro> optional = lRepository.findByNomeContainingIgnoreCase(nome);
-		if (optional.isPresent()) {
-			return ResponseEntity.ok(new LivroDto(optional.get()));
-		}
-		return ResponseEntity.notFound().build();
 	}
 
 }
