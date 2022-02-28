@@ -14,12 +14,12 @@ import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
 import compass.microservice.usuario.controller.form.TesteForm;
+import compass.microservice.usuario.controller.dto.RegistroDto;
 
-@FeignClient("biblioteca")//nome do serviço pra entrar em contato
+@FeignClient("biblioteca") // nome do serviço pra entrar em contato
 public interface BibliotecaClient {
-	//entra contato com a biblioteca
+	// entra contato com a biblioteca
 
-	
 	@RequestMapping(method = RequestMethod.POST, value = "/service/teste")
 	RetornoRequestTesteDto teste(@Valid TesteForm form);
 
@@ -28,7 +28,8 @@ public interface BibliotecaClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/service/listarLivros")
 	List<LivroDto> listarLivros(Long id);
-	
 
+	@RequestMapping(method = RequestMethod.POST, value = "/service/listarRegistrosPorUsuario")
+	List<RegistroDto> listarRegistrosPorUsuario(Long idUsuario);
 
 }

@@ -35,6 +35,16 @@ public class RegistroDto {
 		return registros.map(RegistroDto::new);
 	}
 
+	public static Registro convert(RegistroDto registroDto) {
+		Registro registro = new Registro();
+		registro.setId(registroDto.getId());
+		registro.setIdUsuario(registroDto.getIdUsuario());
+		registro.setStatusRegistro(registroDto.getStatusRegistro());
+		registro.setDataLocacao(registroDto.getDataLocacao());
+		registro.setDataVencimento(registroDto.getDataVencimento());
+		return registro;
+	}
+	
 	public Long getId() {
 		return id;
 	}

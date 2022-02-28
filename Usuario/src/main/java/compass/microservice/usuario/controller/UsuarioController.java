@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import compass.microservice.usuario.controller.dto.LivroDto;
+import compass.microservice.usuario.controller.dto.RegistroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.dto.UsuarioDto;
@@ -38,27 +39,25 @@ import compass.microservice.usuario.service.UsuarioService;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-
 	@Autowired
 	private UsuarioService uService;
 
 	@Autowired
 	private UsuarioRepository uRepo;
 
-
-
 	@PostMapping("/service-teste")
 	@Transactional
-	public ResponseEntity<RetornoRequestTesteDto> cadastrar(@RequestBody @Valid TesteForm form){
+	public ResponseEntity<RetornoRequestTesteDto> cadastrar(@RequestBody @Valid TesteForm form) {
 
-		RetornoRequestTesteDto retorno = uService.teste(form);	
+		RetornoRequestTesteDto retorno = uService.teste(form);
 
 		return ResponseEntity.ok(retorno);
 	}
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> cadastrarUsuario (@RequestBody @Valid CadastrarUsuarioForm form, UriComponentsBuilder uriBuilder ){
+	public ResponseEntity<?> cadastrarUsuario(@RequestBody @Valid CadastrarUsuarioForm form,
+			UriComponentsBuilder uriBuilder) {
 
 		Usuario usuario = form.converter();
 		uRepo.save(usuario);
@@ -68,17 +67,14 @@ public class UsuarioController {
 
 	}
 
-
-
 	@GetMapping
 	public Page<UsuarioDto> listAllUsuarios(
-			@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao){
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
 
 		Page<Usuario> usuarios = uRepo.findAll(paginacao);
 		return UsuarioDto.converter(usuarios);
 
 	}
-
 
 	@PutMapping("/{id}")
 	@Transactional
@@ -93,16 +89,14 @@ public class UsuarioController {
 		return ResponseEntity.notFound().build();
 	}
 
-
-
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> remover(@PathVariable Long id)  {
+	public ResponseEntity<?> remover(@PathVariable Long id) {
 		Optional<Usuario> optional = uRepo.findById(id);
 		if (optional.isPresent()) {
-			if(optional.get().getNumeroDePedidos() >= 1) {
+			if (optional.get().getNumeroDePedidos() >= 1) {
 				return ResponseEntity.badRequest().body("Não é possível excluir um usuário com pedidos em andamento.");
-			}else {
+			} else {
 				uRepo.deleteById(id);
 				return ResponseEntity.ok().build();
 			}
@@ -110,14 +104,13 @@ public class UsuarioController {
 		return ResponseEntity.notFound().build();
 	}
 
-
 	@PostMapping("/pedido")
 	@Transactional
-	public ResponseEntity<?> pedirlivro(@RequestBody @Valid PedirLivroForm form){
+	public ResponseEntity<?> pedirlivro(@RequestBody @Valid PedirLivroForm form) {
 
 		Optional<Usuario> optional = uRepo.findById(form.getIdUser());
 
-		if(optional.isPresent()) {
+		if (optional.isPresent()) {
 			RetornoPedidoDto retorno = uService.pedirLivros(form);
 
 			if (retorno.getStatus().equals("Pedido Realizado com sucesso")) {
@@ -125,7 +118,7 @@ public class UsuarioController {
 				int numeroPedidos = optional.get().getNumeroDePedidos() + 1;
 				optional.get().setNumeroDePedidos(numeroPedidos);
 				return ResponseEntity.ok().body(retorno);
-			}else {
+			} else {
 
 				return ResponseEntity.ok().body(retorno);
 			}
@@ -136,8 +129,14 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/livros/{id}")
-	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
+	public List<LivroDto> livrosBiblioteca(@PathVariable Long id) {
 
 		return uService.listarLivros(id);
 	}
+
+	@GetMapping("/registros/{idUsuario}")
+	public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
+		return uService.listarRegistrosPorUsuario(idUsuario);
+	}
+	
 }

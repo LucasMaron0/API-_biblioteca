@@ -1,5 +1,6 @@
 package compass.microservice.biblioteca.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -16,5 +17,7 @@ public interface RegistroRepository extends JpaRepository<Registro, Long> {
 	Optional<Registro> findByIdUsuario(Long idUser);
 
 	Page<Registro> findByStatusRegistro(StatusRegistro statusRegistro, Pageable paginacao);
+
+	List<Registro> findAllByIdUsuario(Long idUsuario);
 
 }
