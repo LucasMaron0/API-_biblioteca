@@ -20,4 +20,6 @@ public interface RegistroRepository extends JpaRepository<Registro, Long> {
 
 	List<Registro> findAllByIdUsuario(Long idUsuario);
 
+	List<Registro> findByStatusRegistro(StatusRegistro emAndamento);
+
 }

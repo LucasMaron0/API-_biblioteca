@@ -45,6 +45,7 @@ public class Registro {
 	
 	private LocalDate dataVencimento;
 	
+	private Double multaGerada;	
 	
 	public Registro () {
 		
@@ -61,6 +62,7 @@ public class Registro {
 		this.statusRegistro = StatusRegistro.EM_ANDAMENTO;
 		this.dataLocacao = LocalDate.now();
 		this.dataVencimento = dataLocacao.plus(7, ChronoUnit.DAYS);
+		
 		
 	}
 
@@ -122,6 +124,36 @@ public class Registro {
 	public void setStatusRegistro(StatusRegistro statusRegistro) {
 		this.statusRegistro = statusRegistro;
 	}
+
+
+	
+
+	public Double getMultaGerada() {
+		return multaGerada;
+	}
+
+
+
+
+	public void setMultaGerada(Double multaGerada) {
+		this.multaGerada = multaGerada;
+	}
+	
+	public Double multaGerada() {
+		if(LocalDate.now().isAfter(dataVencimento)) {
+			int diasAtraso = LocalDate.now().compareTo(dataVencimento);
+			System.out.println(diasAtraso);
+			Double multa = diasAtraso * 0.75;
+			return multa;
+		}
+		return 0.0;
+		
+	}
+
+
+
+
+	
 	
 	
 	
