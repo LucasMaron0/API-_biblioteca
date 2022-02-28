@@ -1,5 +1,7 @@
 package compass.microservice.biblioteca.controller;
 
+import java.util.Objects;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,37 +29,39 @@ import compass.microservice.biblioteca.service.BibliotecaService;
 @RestController
 @RequestMapping("/registro")
 public class RegistroController {
-	
+
 	@Autowired
 	private BibliotecaRepository bRepo;
-	
+
 	@Autowired
 	private LivrosRepository lRepo;
-	
+
 	@Autowired
 	private RegistroRepository rRepo;
-	
+
 	@Autowired
 	private BibliotecaService bService;
-	
-	
+
 	@PutMapping("/encerrar/{id}")
 	@Transactional
-	public ResponseEntity<?>  encerrarRegistro(@PathVariable Long id){
-		
-		 ResponseEntity<?>  encPedido = bService.encerrarPedido(id);
-		
+	public ResponseEntity<?> encerrarRegistro(@PathVariable Long id) {
+
+		ResponseEntity<?> encPedido = bService.encerrarPedido(id);
+
 		return ResponseEntity.ok(encPedido);
 	}
-	
+
 	@GetMapping
 	public Page<RegistroDto> registroLivros(@RequestParam(required = false) StatusRegistro statusRegistro,
-			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) {
-		
-		Page<Registro> registros = rRepo.findByStatusRegistro(statusRegistro, paginacao);
-		return RegistroDto.converter(registros);
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
+		if (Objects.isNull(statusRegistro)) {
+			Page<Registro> registros = rRepo.findAll(paginacao);
+			return RegistroDto.converter(registros);
+		} else {
+			Page<Registro> registros = rRepo.findByStatusRegistro(statusRegistro, paginacao);
+			return RegistroDto.converter(registros);
+		}
+
 	}
-	
-	
 
 }
