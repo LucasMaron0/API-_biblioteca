@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
+import compass.microservice.biblioteca.controller.dto.InfoLocLivroDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RegistroDto;
 import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
+import compass.microservice.biblioteca.controller.form.BuscarLivroProximoForm;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
 import compass.microservice.biblioteca.controller.form.RequestTesteForm;
@@ -48,7 +50,7 @@ public class BibliotecaServiceController {
 	public List<LivroDto> listarLivros(@RequestBody Long id) {
 		return bService.listarLivros(id);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST, value = "/biblioteca-mais-proxima")	
 	public BibliotecaDto listarLivros(@RequestBody ReceberEnderecoUsuario form) throws Exception {				
 		return bService.listarLivros(form);
@@ -57,6 +59,10 @@ public class BibliotecaServiceController {
 	@RequestMapping(method = RequestMethod.POST, value = "/listarRegistrosPorUsuario")
 	public List<RegistroDto> listarRegistrosPorUsuario(@RequestBody Long idUsuario) {
 		return bService.getByIdUsuario(idUsuario);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/livro-mais-proximo")
+	public List<InfoLocLivroDto> listarRegistrosPorUsuario(@RequestBody BuscarLivroProximoForm form) throws Exception {
+		return bService.buscarLivroProximo(form);
 	}
 
 }

@@ -33,8 +33,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 
 import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
+import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.form.CadastrarBibliotecaForm;
 import compass.microservice.biblioteca.modelos.Biblioteca;
+import compass.microservice.biblioteca.modelos.Livro;
 import compass.microservice.biblioteca.repository.BibliotecaRepository;
 import compass.microservice.biblioteca.repository.LivrosRepository;
 import compass.microservice.biblioteca.repository.RegistroRepository;

@@ -24,11 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
+import compass.microservice.usuario.controller.dto.InfoLocLivroDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RegistroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.dto.UsuarioDto;
+import compass.microservice.usuario.controller.form.BuscarLivroProximoForm;
+import compass.microservice.usuario.controller.form.BuscarNomeLivrosForm;
 import compass.microservice.usuario.controller.form.CadastrarUsuarioForm;
 import compass.microservice.usuario.controller.form.MandarEnderecoUsuario;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
@@ -140,28 +143,38 @@ public class UsuarioController {
 	public ResponseEntity<?> buscarBiblioMaisProxima (@PathVariable long userId) {
 		Optional<Usuario> optional = uRepo.findById(userId);
 		if (optional.isPresent()) {
-			
+
 			MandarEnderecoUsuario end = new MandarEnderecoUsuario(userId, optional.get().getEndereco()); 
 			EndBibliotecaDto retorno = uService.buscarBibliMaisProxima(end);
-			
+
 			return ResponseEntity.ok(retorno);
 		}
-		
+
 		return ResponseEntity.badRequest().body("Usuario não existe");
-	}
-
-
-
-	public List<LivroDto> livrosBiblioteca(@PathVariable Long id) {
-
-		return uService.listarLivros(id);
 	}
 
 	@GetMapping("/registros/{idUsuario}")
 	public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
 		return uService.listarRegistrosPorUsuario(idUsuario);
 	}
-	
+
+	@PostMapping("/buscarLivroProximo/{id}")
+	public ResponseEntity<?> buscarLivroProximo (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
+
+		Optional<Usuario> op = uRepo.findById(id);
+		if (op.isPresent()) {
+			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
+					op.get().getEndereco(), nomeLivros.getNomeLivros());
+
+
+
+			List<InfoLocLivroDto> livros = uService.buscarLivroProximo(form);
+			return ResponseEntity.ok().body(livros);
+
+		}
+		return ResponseEntity.badRequest().body("Usuario não existe");
+	}
+
 
 }
 

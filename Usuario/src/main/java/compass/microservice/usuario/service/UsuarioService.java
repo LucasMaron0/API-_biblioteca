@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import compass.microservice.usuario.client.BibliotecaClient;
 import compass.microservice.usuario.controller.dto.EncerrarPedidoDto;
 import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
+import compass.microservice.usuario.controller.dto.InfoLocLivroDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RegistroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
+import compass.microservice.usuario.controller.form.BuscarLivroProximoForm;
 import compass.microservice.usuario.controller.form.MandarEnderecoUsuario;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
 import compass.microservice.usuario.controller.form.TesteForm;
@@ -34,7 +36,7 @@ public class UsuarioService {
 	private UsuarioRepository uRepo;
 
 	//Manda
-	
+
 	public RetornoRequestTesteDto teste(@Valid TesteForm form) {
 
 		RetornoRequestTesteDto retorno = bClient.teste(form);
@@ -50,27 +52,30 @@ public class UsuarioService {
 	}
 
 	public List<LivroDto> listarLivros(Long id) {
-		
+
 		List<LivroDto>listarLivros = bClient.listarLivros(id);
-		
+
 		return listarLivros;
 	}
-	
+
 
 	public EndBibliotecaDto buscarBibliMaisProxima(MandarEnderecoUsuario end) {
-		
+
 		return bClient.buscarBiblioMaisProxima(end);
 	}
 
 
 
 	public List<RegistroDto> listarRegistrosPorUsuario(Long idUsuario){
-		
+
 		List<RegistroDto> listarRegistrosPorUsuario = bClient.listarRegistrosPorUsuario(idUsuario);
-		
+
 		return listarRegistrosPorUsuario;
 	}
-	
+	public List<InfoLocLivroDto> buscarLivroProximo(BuscarLivroProximoForm form) {
+
+		return bClient.buscarLivroProximo(form);
+	}
 	//Recebe
 
 	public boolean encerrarRegistro(EncerrarPedidoDto encPedido) {

@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
+import compass.microservice.usuario.controller.dto.InfoLocLivroDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
+import compass.microservice.usuario.controller.form.BuscarLivroProximoForm;
 import compass.microservice.usuario.controller.form.MandarEnderecoUsuario;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
 import compass.microservice.usuario.controller.form.TesteForm;
@@ -36,5 +38,8 @@ public interface BibliotecaClient {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/service/listarRegistrosPorUsuario")
 	List<RegistroDto> listarRegistrosPorUsuario(Long idUsuario);
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/service/livro-mais-proximo")
+	List<InfoLocLivroDto> buscarLivroProximo(BuscarLivroProximoForm form);
 
 }
