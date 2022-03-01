@@ -1,6 +1,9 @@
 package compass.microservice.biblioteca.controller;
 
+
+import java.util.List;
 import java.util.Objects;
+
 
 import javax.transaction.Transactional;
 
@@ -17,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
 import compass.microservice.biblioteca.controller.dto.RegistroDto;
 import compass.microservice.biblioteca.modelos.Registro;
 import compass.microservice.biblioteca.modelos.StatusRegistro;
@@ -63,5 +65,21 @@ public class RegistroController {
 		}
 
 	}
+
+	
+	@GetMapping("/checkarMultas")
+	public List<Registro> checkarMultas(){
+
+		List<Registro> checkarMultas = rRepo.findByStatusRegistro(StatusRegistro.EM_ANDAMENTO);
+		for (Registro registro : checkarMultas) {
+			Double multa = registro.multaGerada();
+			registro.setMultaGerada(multa);
+			rRepo.save(registro);
+
+		}
+
+		return null;
+	}
+
 
 }
