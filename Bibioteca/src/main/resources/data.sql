@@ -40,3 +40,9 @@ INSERT INTO ENDERECO(biblioteca_id, rua, numero, bairro, cidade, estado) VALUES(
 INSERT INTO ENDERECO(biblioteca_id, rua, numero, bairro, cidade, estado) VALUES(19, 'Praça João Eduardo de Moraes',00,'Enseada','Sao Sebastiao','SP');
 INSERT INTO ENDERECO(biblioteca_id, rua, numero, bairro, cidade, estado) VALUES(20, 'Avenida Antonio Torquato',00,'Centro','Ouvidor','GO');
 
+
+INSERT INTO LIVRO(biblioteca_id, nome, categoria, autor, editora, lancamento, status_livro) VALUES(1,'O Senhor dos Aneis', 'AVENTURA', 'J R R Tolkien', 'Allen & Unwin', '1954-07-29', 'DISPONIVEL'	);
+
+INSERT INTO REGISTRO(data_locacao, data_vencimento, status_registro, biblioteca_id, id_usuario, multa_gerada) VALUES('2022-02-14', '2022-02-18', 'FINALIZADO', 1, 1,0);
+INSERT INTO REGISTRO(data_locacao, data_vencimento, status_registro, biblioteca_id, id_usuario, multa_gerada) VALUES('2022-02-14', '2022-02-26', 'EM_ANDAMENTO', 1, 2,0);
+

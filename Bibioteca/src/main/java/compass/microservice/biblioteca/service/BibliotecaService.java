@@ -1,9 +1,9 @@
 package compass.microservice.biblioteca.service;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +16,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 
-
 import compass.microservice.biblioteca.client.UsuarioClient;
 import compass.microservice.biblioteca.controller.BibliotecaController;
 import compass.microservice.biblioteca.controller.LivroController;
 import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
 import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
+import compass.microservice.biblioteca.controller.dto.RegistroDto;
 import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
@@ -40,7 +40,7 @@ import compass.microservice.biblioteca.repository.RegistroRepository;
 @Service
 public class BibliotecaService {
 
-	//recebe e manda requests para o  usuario
+	// recebe e manda requests para o usuario
 
 	@Autowired
 	private BibliotecaRepository bRepo;
@@ -54,23 +54,22 @@ public class BibliotecaService {
 	@Autowired
 	private UsuarioClient uClient;
 
-	@Autowired 
+	@Autowired
 	private LivroController lController;
 
-
-	//Manda
+	// Manda
 	public ResponseEntity<?> encerrarPedido(Long id) {
 
 		Optional<Registro> optRegistro = rRepo.findById(id);
 
-		if(optRegistro.isEmpty()) {
+		if (optRegistro.isEmpty()) {
 			return ResponseEntity.badRequest().body("Este registro não existe");
 		}
 
 		Registro registro = optRegistro.get();
 		List<Livro> livros = registro.getLivros();
 
-		for(Livro l: livros) {
+		for (Livro l : livros) {
 			l.setRegistro(null);
 			l.setStatusLivro(StatusLivro.DISPONIVEL);
 			lRepo.save(l);
@@ -78,22 +77,19 @@ public class BibliotecaService {
 
 		registro.setStatusRegistro(StatusRegistro.FINALIZADO);
 
-		EncerrarPedidoDto encPedido = new EncerrarPedidoDto(registro.getIdUsuario(), registro.getId(),"encerrado");
+		EncerrarPedidoDto encPedido = new EncerrarPedidoDto(registro.getIdUsuario(), registro.getId(), "encerrado");
 
 		boolean b = uClient.encerrarRegistro(encPedido);
 
-		if(b) {
+		if (b) {
 			return ResponseEntity.ok(encPedido);
-		}else {
+		} else {
 			return ResponseEntity.ok("erro");
 		}
 
-
 	}
 
-
-
-	//Recebe (da BibliotecaServiceController que recebe do  Usuario)
+	// Recebe (da BibliotecaServiceController que recebe do Usuario)
 	public ResponseEntity<RequestTesteDTO> teste(RequestTesteForm form) {
 
 		String mensagemRetorno = form.getNome() + "---OK--- mensagem  processada pela  biblioteca";
@@ -101,9 +97,6 @@ public class BibliotecaService {
 
 		return ResponseEntity.ok(teste);
 	}
-
-
-
 
 	public ResponseEntity<RequestPedirLivroDto> pedirLivros(RequestPedirLivros form) {
 
@@ -113,14 +106,14 @@ public class BibliotecaService {
 
 		Optional<Registro> optRegistro = rRepo.findByIdUsuario(form.getIdUser());
 
-		if(opBiblio.isEmpty()) {
+		if (opBiblio.isEmpty()) {
 			request.setStatus("Biblioteca não existe");
-			return  ResponseEntity.ok(request);
+			return ResponseEntity.ok(request);
 
-		}else {
+		} else {
 
-			if(optRegistro.isPresent()) {
-				if(optRegistro.get().getBiblioteca().getId() == opBiblio.get().getId()) {
+			if (optRegistro.isPresent()) {
+				if (optRegistro.get().getBiblioteca().getId() == opBiblio.get().getId()) {
 					request.setStatus("O usuário já tem um pedido em andamento nesta biblioteca");
 					return ResponseEntity.ok(request);
 				}
@@ -135,11 +128,11 @@ public class BibliotecaService {
 
 				Optional<Livro> livro = lRepo.findById(id);
 
-				if(livro.isPresent() && livro.get().getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
+				if (livro.isPresent() && livro.get().getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
 					livrosPedido.add(livro.get());
 					livrosDisponiveis.add(livro.get().getId());
 
-				}else{
+				} else {
 					livrosIndisponiveis.add(id);
 				}
 			}
@@ -152,17 +145,14 @@ public class BibliotecaService {
 				request.setStatus("Alguns dos livros que você pediu não estão disponíveis");
 				return ResponseEntity.ok(request);
 
-			}else {
-				Registro registro = new Registro(
-						form.getIdUser(),
-						livrosPedido,
-						opBiblio.get());
+			} else {
+				Registro registro = new Registro(form.getIdUser(), livrosPedido, opBiblio.get());
 
 				rRepo.save(registro);
 
 				for (Livro livro : livrosPedido) {
 					livro.setRegistro(registro);
-					livro.setStatusLivro(StatusLivro.INDISPONIVEL);	
+					livro.setStatusLivro(StatusLivro.INDISPONIVEL);
 					lRepo.save(livro);
 				}
 
@@ -174,16 +164,17 @@ public class BibliotecaService {
 
 	}
 
-
-
 	public List<LivroDto> listarLivros(Long id) {
+
 		Page<LivroDto> livrosBiblioteca = lController.livrosBiblioteca(id,null);
 
 		return livrosBiblioteca.getContent();
 	}
 
-
-
+	public List<RegistroDto> getByIdUsuario(Long idUsuario) {
+		List<Registro> registros = rRepo.findAllByIdUsuario(idUsuario);
+		return registros.stream().map(RegistroDto::new).collect(Collectors.toList());
+	}
 
 	public BibliotecaDto listarLivros(ReceberEnderecoUsuario form) throws Exception {
 		List<Biblioteca> bibliotecas = bRepo.findAll();
@@ -195,4 +186,3 @@ public class BibliotecaService {
 
 
 }
-

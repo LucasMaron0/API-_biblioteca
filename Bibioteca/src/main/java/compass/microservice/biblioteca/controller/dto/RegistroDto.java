@@ -18,6 +18,8 @@ public class RegistroDto {
 	private LocalDate dataLocacao;
 
 	private LocalDate dataVencimento;
+	
+	private double multaGerada;
 
 	public RegistroDto() {
 
@@ -29,12 +31,24 @@ public class RegistroDto {
 		this.statusRegistro = registro.getStatusRegistro();
 		this.dataLocacao = registro.getDataLocacao();
 		this.dataVencimento = registro.getDataVencimento();
+		this.multaGerada = registro.multaGerada();
 	}
 
 	public static Page<RegistroDto> converter(Page<Registro> registros) {
 		return registros.map(RegistroDto::new);
 	}
 
+	public static Registro convert(RegistroDto registroDto) {
+		Registro registro = new Registro();
+		registro.setId(registroDto.getId());
+		registro.setIdUsuario(registroDto.getIdUsuario());
+		registro.setStatusRegistro(registroDto.getStatusRegistro());
+		registro.setDataLocacao(registroDto.getDataLocacao());
+		registro.setDataVencimento(registroDto.getDataVencimento());
+		
+		return registro;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -74,5 +88,17 @@ public class RegistroDto {
 	public void setDataVencimento(LocalDate dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
+
+	public double getMultaGerada() {
+		return multaGerada;
+	}
+
+	public void setMultaGerada(double multaGerada) {
+		this.multaGerada = multaGerada;
+	}
+
+	
+	
+	
 
 }

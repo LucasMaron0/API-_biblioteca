@@ -13,6 +13,7 @@ import compass.microservice.usuario.client.BibliotecaClient;
 import compass.microservice.usuario.controller.dto.EncerrarPedidoDto;
 import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
+import compass.microservice.usuario.controller.dto.RegistroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.form.MandarEnderecoUsuario;
@@ -63,6 +64,13 @@ public class UsuarioService {
 
 
 
+	public List<RegistroDto> listarRegistrosPorUsuario(Long idUsuario){
+		
+		List<RegistroDto> listarRegistrosPorUsuario = bClient.listarRegistrosPorUsuario(idUsuario);
+		
+		return listarRegistrosPorUsuario;
+	}
+	
 	//Recebe
 
 	public boolean encerrarRegistro(EncerrarPedidoDto encPedido) {
