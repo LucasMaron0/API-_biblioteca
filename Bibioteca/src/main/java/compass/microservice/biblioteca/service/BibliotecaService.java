@@ -19,11 +19,13 @@ import org.springframework.data.web.PageableDefault;
 import compass.microservice.biblioteca.client.UsuarioClient;
 import compass.microservice.biblioteca.controller.BibliotecaController;
 import compass.microservice.biblioteca.controller.LivroController;
+import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
 import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RegistroDto;
 import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
+import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
 import compass.microservice.biblioteca.controller.form.RequestTesteForm;
 import compass.microservice.biblioteca.modelos.Biblioteca;
@@ -163,7 +165,8 @@ public class BibliotecaService {
 	}
 
 	public List<LivroDto> listarLivros(Long id) {
-		Page<LivroDto> livrosBiblioteca = lController.livrosBiblioteca(id, null);
+
+		Page<LivroDto> livrosBiblioteca = lController.livrosBiblioteca(id,null);
 
 		return livrosBiblioteca.getContent();
 	}
@@ -172,5 +175,14 @@ public class BibliotecaService {
 		List<Registro> registros = rRepo.findAllByIdUsuario(idUsuario);
 		return registros.stream().map(RegistroDto::new).collect(Collectors.toList());
 	}
+
+	public BibliotecaDto listarLivros(ReceberEnderecoUsuario form) throws Exception {
+		List<Biblioteca> bibliotecas = bRepo.findAll();
+		Localizacao loc = new Localizacao();
+		Biblioteca biblioteca = loc.procurarBibliotecaMaisProxima(form, bibliotecas);
+		return new BibliotecaDto(biblioteca);
+	}
+
+
 
 }

@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RegistroDto;
 import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
+import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
 import compass.microservice.biblioteca.controller.form.RequestTesteForm;
 import compass.microservice.biblioteca.modelos.Livro;
@@ -45,6 +47,11 @@ public class BibliotecaServiceController {
 	@RequestMapping(method = RequestMethod.POST, value = "/listarLivros")
 	public List<LivroDto> listarLivros(@RequestBody Long id) {
 		return bService.listarLivros(id);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/biblioteca-mais-proxima")	
+	public BibliotecaDto listarLivros(@RequestBody ReceberEnderecoUsuario form) throws Exception {				
+		return bService.listarLivros(form);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/listarRegistrosPorUsuario")

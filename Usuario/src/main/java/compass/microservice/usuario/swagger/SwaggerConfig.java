@@ -16,8 +16,8 @@ public class SwaggerConfig {
 	public Docket compassApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("av4.compass.microservice.associado"))
-				.paths(PathSelectors.ant("/associados/**"))
+				.apis(RequestHandlerSelectors.basePackage("compass.microservice.usuario"))
+				.paths(PathSelectors.ant("/**"))
 				.build();
 	}
 

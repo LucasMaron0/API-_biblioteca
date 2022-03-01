@@ -23,12 +23,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RegistroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
 import compass.microservice.usuario.controller.dto.UsuarioDto;
 import compass.microservice.usuario.controller.form.CadastrarUsuarioForm;
+import compass.microservice.usuario.controller.form.MandarEnderecoUsuario;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
 import compass.microservice.usuario.controller.form.TesteForm;
 import compass.microservice.usuario.modelo.Usuario;
@@ -129,6 +131,27 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/livros/{id}")
+
+	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
+		return uService.listarLivros(id);
+	}
+
+	@PostMapping("/buscarBiblioteca/{userId}")
+	public ResponseEntity<?> buscarBiblioMaisProxima (@PathVariable long userId) {
+		Optional<Usuario> optional = uRepo.findById(userId);
+		if (optional.isPresent()) {
+			
+			MandarEnderecoUsuario end = new MandarEnderecoUsuario(userId, optional.get().getEndereco()); 
+			EndBibliotecaDto retorno = uService.buscarBibliMaisProxima(end);
+			
+			return ResponseEntity.ok(retorno);
+		}
+		
+		return ResponseEntity.badRequest().body("Usuario não existe");
+	}
+
+
+
 	public List<LivroDto> livrosBiblioteca(@PathVariable Long id) {
 
 		return uService.listarLivros(id);
@@ -139,4 +162,7 @@ public class UsuarioController {
 		return uService.listarRegistrosPorUsuario(idUsuario);
 	}
 	
+
 }
+
+

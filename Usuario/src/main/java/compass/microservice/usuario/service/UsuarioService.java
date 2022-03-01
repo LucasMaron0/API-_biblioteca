@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import compass.microservice.usuario.client.BibliotecaClient;
 import compass.microservice.usuario.controller.dto.EncerrarPedidoDto;
+import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RegistroDto;
 import compass.microservice.usuario.controller.dto.RetornoPedidoDto;
 import compass.microservice.usuario.controller.dto.RetornoRequestTesteDto;
+import compass.microservice.usuario.controller.form.MandarEnderecoUsuario;
 import compass.microservice.usuario.controller.form.PedirLivroForm;
 import compass.microservice.usuario.controller.form.TesteForm;
 import compass.microservice.usuario.modelo.Usuario;
@@ -53,6 +55,14 @@ public class UsuarioService {
 		
 		return listarLivros;
 	}
+	
+
+	public EndBibliotecaDto buscarBibliMaisProxima(MandarEnderecoUsuario end) {
+		
+		return bClient.buscarBiblioMaisProxima(end);
+	}
+
+
 
 	public List<RegistroDto> listarRegistrosPorUsuario(Long idUsuario){
 		
@@ -79,7 +89,6 @@ public class UsuarioService {
 			return false;
 		}
 	}
-
 
 
 

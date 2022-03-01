@@ -1,11 +1,18 @@
 package compass.microservice.biblioteca.controller;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,20 +26,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+
+
 import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
-import compass.microservice.biblioteca.controller.dto.LivroDto;
-import compass.microservice.biblioteca.controller.dto.RegistroDto;
-import compass.microservice.biblioteca.controller.dto.erros.ErroCadastrarLivro;
 import compass.microservice.biblioteca.controller.form.CadastrarBibliotecaForm;
-import compass.microservice.biblioteca.controller.form.CadastrarLivroForm;
 import compass.microservice.biblioteca.modelos.Biblioteca;
-import compass.microservice.biblioteca.modelos.Livro;
-import compass.microservice.biblioteca.modelos.Registro;
-import compass.microservice.biblioteca.modelos.StatusRegistro;
 import compass.microservice.biblioteca.repository.BibliotecaRepository;
 import compass.microservice.biblioteca.repository.LivrosRepository;
 import compass.microservice.biblioteca.repository.RegistroRepository;
@@ -125,5 +127,7 @@ public class BibliotecaController {
 		}
 		return ResponseEntity.notFound().build();
 	}
+
+	
 
 }
