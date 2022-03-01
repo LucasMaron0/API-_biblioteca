@@ -66,7 +66,7 @@ public class RegistroController {
 
 	}
 
-	
+
 	@GetMapping("/checkarMultas")
 	public List<Registro> checkarMultas(){
 

@@ -1,7 +1,9 @@
 package compass.microservice.biblioteca.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,10 +23,12 @@ import compass.microservice.biblioteca.controller.BibliotecaController;
 import compass.microservice.biblioteca.controller.LivroController;
 import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
 import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
+import compass.microservice.biblioteca.controller.dto.InfoLocLivroDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RegistroDto;
 import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
+import compass.microservice.biblioteca.controller.form.BuscarLivroProximoForm;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
 import compass.microservice.biblioteca.controller.form.RequestTesteForm;
@@ -183,6 +187,54 @@ public class BibliotecaService {
 		return new BibliotecaDto(biblioteca);
 	}
 
+
+	public List<InfoLocLivroDto> buscarLivroProximo(BuscarLivroProximoForm form) throws Exception {
+
+		List<InfoLocLivroDto> livrosMaisProximos = new ArrayList<InfoLocLivroDto>();
+
+		for (String s: form.getNomeLivros()) {
+
+			List<Livro> livros = lRepo.findByNome(s);
+
+			if (livros.size()>=2) {
+
+				List<Biblioteca> bibliotecas = new ArrayList<Biblioteca>();
+				HashMap<Long, Livro> relacao = new HashMap<>();
+
+				for (Livro l : livros) {
+					bibliotecas.add(l.getBiblioteca());
+					relacao.put(l.getBiblioteca().getId(), l);
+				}				
+
+				ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
+				Localizacao loc = new Localizacao();
+
+				Biblioteca bbMaisProxima = loc.procurarBibliotecaMaisProxima(usuarioEnd , bibliotecas);
+
+				Livro livroMaisProximo = null;
+
+				for (Map.Entry<Long, Livro> entry: relacao.entrySet()) {
+					if(entry.getKey().equals(bbMaisProxima.getId())) {
+						livroMaisProximo = entry.getValue();
+					}
+				}
+
+				InfoLocLivroDto info = new InfoLocLivroDto(livroMaisProximo, bbMaisProxima);
+				livrosMaisProximos.add(info);
+
+			}else {
+				Livro livro = livros.get(0);
+				InfoLocLivroDto info = new InfoLocLivroDto(livro, livro.getBiblioteca());
+				livrosMaisProximos.add(info);
+			}
+
+
+		}
+
+
+		return livrosMaisProximos;
+
+	}
 
 
 }
