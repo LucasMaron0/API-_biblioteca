@@ -53,7 +53,7 @@ public class BibliotecaServiceController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/biblioteca-mais-proxima")	
 	public BibliotecaDto listarLivros(@RequestBody ReceberEnderecoUsuario form) throws Exception {				
-		return bService.listarLivros(form);
+		return bService.buscarBiblioProxima(form);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/listarRegistrosPorUsuario")

@@ -20,7 +20,7 @@ public class InfoLocLivroDto {
 	public InfoLocLivroDto(Livro l, Biblioteca bb) {
 		
 		this.idLivro = l.getId();
-		this.nomeLivro = l.getNome();
+		this.nomeLivro = l.getNome() +" /"+l.getStatusLivro();
 		this.nomeBiblioteca= bb.getNome();
 		
 		

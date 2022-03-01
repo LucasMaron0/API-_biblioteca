@@ -180,7 +180,7 @@ public class BibliotecaService {
 		return registros.stream().map(RegistroDto::new).collect(Collectors.toList());
 	}
 
-	public BibliotecaDto listarLivros(ReceberEnderecoUsuario form) throws Exception {
+	public BibliotecaDto buscarBiblioProxima(ReceberEnderecoUsuario form) throws Exception {
 		List<Biblioteca> bibliotecas = bRepo.findAll();
 		Localizacao loc = new Localizacao();
 		Biblioteca biblioteca = loc.procurarBibliotecaMaisProxima(form, bibliotecas);
