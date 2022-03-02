@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +13,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import compass.microservice.biblioteca.controller.form.BuscarLivroProximoForm;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Endereco;
+import compass.microservice.biblioteca.modelos.Livro;
+import compass.microservice.biblioteca.modelos.StatusLivro;
 
 public class Localizacao {
 
@@ -45,7 +49,7 @@ public class Localizacao {
 		HttpClient client = HttpClient.newBuilder().build();
 		String response = client.send(request, HttpResponse.BodyHandlers.ofString()).body();
 
-	
+
 
 		JSONParser jp = new JSONParser();
 		JSONObject jo = (JSONObject) jp.parse(response);
@@ -55,7 +59,7 @@ public class Localizacao {
 
 		Long menor = null;
 		int keyMaisProxima = 0;
-		
+
 
 		for(int i = 0; i <relacao.size(); i++) {
 			jo= (JSONObject) ja.get(i);
@@ -75,6 +79,39 @@ public class Localizacao {
 		return relacao.get(keyMaisProxima);
 
 
+	}
+
+
+	public Livro livroMaisProximo(ReceberEnderecoUsuario usuarioEnd, List<Livro> livros) throws Exception {
+
+		List<Biblioteca> bibliotecas = new ArrayList<Biblioteca>();
+		HashMap<Long, Livro> relacao = new HashMap<>();
+
+		for (Livro l : livros) {
+			bibliotecas.add(l.getBiblioteca());
+			//garantindo, caso existam dois livros iguais em uma mesma biblioteca, que o disponivel tenha prioridade
+			if (relacao.containsKey(l.getBiblioteca().getId())) {
+				Livro livroPresente = relacao.get(l.getBiblioteca().getId());
+				if(livroPresente.getStatusLivro().equals(StatusLivro.INDISPONIVEL));{
+					relacao.put(l.getBiblioteca().getId(), l);
+				}
+			}else {
+				relacao.put(l.getBiblioteca().getId(), l);
+			}
+
+		}				
+
+		Biblioteca bbMaisProxima = procurarBibliotecaMaisProxima(usuarioEnd , bibliotecas);
+
+		Livro livroMaisProximo = null;
+
+		for (Map.Entry<Long, Livro> entry: relacao.entrySet()) {
+			if(entry.getKey().equals(bbMaisProxima.getId())) {
+				livroMaisProximo = entry.getValue();
+			}
+		}
+
+		return livroMaisProximo;
 	}
 
 
@@ -101,5 +138,9 @@ public class Localizacao {
 
 		return destino;
 	}
+
+
+
+
 
 }

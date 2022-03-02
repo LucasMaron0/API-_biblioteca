@@ -12,6 +12,9 @@ public class InfoLocLivroDto {
 	private String nomeBiblioteca;
 
 	private String endBiblioteca;
+	
+	
+	private String statusLivro;
 
 	public String getNomeLivro() {
 		return nomeLivro;
@@ -45,6 +48,15 @@ public class InfoLocLivroDto {
 		this.idLivro = idLivro;
 	}
 
+	public String getStatusLivro() {
+		return statusLivro;
+	}
+
+	public void setStatusLivro(String statusLivro) {
+		this.statusLivro = statusLivro;
+	}
+
+	
 	
 
 }

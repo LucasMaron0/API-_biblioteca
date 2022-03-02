@@ -71,6 +71,11 @@ public class BibliotecaService {
 		}
 
 		Registro registro = optRegistro.get();
+
+		if(registro.getStatusRegistro().equals(StatusRegistro.FINALIZADO)) {
+			return ResponseEntity.badRequest().body("Este registro já foi finalizado.");
+		}
+
 		List<Livro> livros = registro.getLivros();
 
 		for (Livro l : livros) {
@@ -108,7 +113,7 @@ public class BibliotecaService {
 
 		Optional<Biblioteca> opBiblio = bRepo.findById(form.getIdBiblioteca());
 
-		Optional<Registro> optRegistro = rRepo.findByIdUsuario(form.getIdUser());
+		List<Registro> registros = rRepo.findAllByIdUsuario(form.getIdUser());
 
 		if (opBiblio.isEmpty()) {
 			request.setStatus("Biblioteca não existe");
@@ -116,10 +121,12 @@ public class BibliotecaService {
 
 		} else {
 
-			if (optRegistro.isPresent()) {
-				if (optRegistro.get().getBiblioteca().getId() == opBiblio.get().getId()) {
-					request.setStatus("O usuário já tem um pedido em andamento nesta biblioteca");
-					return ResponseEntity.ok(request);
+			if (!registros.isEmpty()) {
+				for(Registro r:registros) {
+					if (r.getBiblioteca().getId() == opBiblio.get().getId() && r.getStatusRegistro().equals(StatusRegistro.EM_ANDAMENTO)) {
+						request.setStatus("O usuário já tem um pedido em andamento nesta biblioteca");
+						return ResponseEntity.ok(request);
+					}
 				}
 			}
 
@@ -198,38 +205,27 @@ public class BibliotecaService {
 
 			if (livros.size()>=2) {
 
-				List<Biblioteca> bibliotecas = new ArrayList<Biblioteca>();
-				HashMap<Long, Livro> relacao = new HashMap<>();
-
-				for (Livro l : livros) {
-					bibliotecas.add(l.getBiblioteca());
-					relacao.put(l.getBiblioteca().getId(), l);
-				}				
-
-				ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
 				Localizacao loc = new Localizacao();
+				ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
 
-				Biblioteca bbMaisProxima = loc.procurarBibliotecaMaisProxima(usuarioEnd , bibliotecas);
+				Livro livroMaisProximo = loc.livroMaisProximo(usuarioEnd, livros);
 
-				Livro livroMaisProximo = null;
-
-				for (Map.Entry<Long, Livro> entry: relacao.entrySet()) {
-					if(entry.getKey().equals(bbMaisProxima.getId())) {
-						livroMaisProximo = entry.getValue();
-					}
-				}
-
-				InfoLocLivroDto info = new InfoLocLivroDto(livroMaisProximo, bbMaisProxima);
+				InfoLocLivroDto info = new InfoLocLivroDto(livroMaisProximo, livroMaisProximo.getBiblioteca());
 				livrosMaisProximos.add(info);
 
-			}else {
+			}else if (livros.isEmpty())  {
+
+				InfoLocLivroDto info = new InfoLocLivroDto(s);
+				livrosMaisProximos.add(info);
+
+			}else{
+
 				Livro livro = livros.get(0);
 				InfoLocLivroDto info = new InfoLocLivroDto(livro, livro.getBiblioteca());
 				livrosMaisProximos.add(info);
 			}
-
-
 		}
+
 
 
 		return livrosMaisProximos;

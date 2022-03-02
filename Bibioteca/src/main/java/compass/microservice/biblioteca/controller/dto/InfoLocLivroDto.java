@@ -14,13 +14,15 @@ public class InfoLocLivroDto {
 
 	private String endBiblioteca;
 	
+	private String statusLivro;
+	
 	
 	
 	
 	public InfoLocLivroDto(Livro l, Biblioteca bb) {
 		
 		this.idLivro = l.getId();
-		this.nomeLivro = l.getNome() +" /"+l.getStatusLivro();
+		this.nomeLivro = l.getNome();
 		this.nomeBiblioteca= bb.getNome();
 		
 		
@@ -30,7 +32,14 @@ public class InfoLocLivroDto {
 				+", "+ bb.getEndereco().getRua()
 				+", "+ bb.getEndereco().getNumero();
 		
+		this.statusLivro = l.getStatusLivro().toString();
 		
+		
+	}
+
+	public InfoLocLivroDto(String s) {
+		this.nomeLivro = s;
+		this.statusLivro = "Livro não encontrado";
 	}
 
 	public String getNomeLivro() {
@@ -64,6 +73,16 @@ public class InfoLocLivroDto {
 	public void setIdLivro(Long idLivro) {
 		this.idLivro = idLivro;
 	}
+
+	public String getStatusLivro() {
+		return statusLivro;
+	}
+
+	public void setStatusLivro(String statusLivro) {
+		this.statusLivro = statusLivro;
+	}
+	
+	
 
 	
 

@@ -14,7 +14,7 @@ import compass.microservice.biblioteca.modelos.StatusRegistro;
 
 public interface RegistroRepository extends JpaRepository<Registro, Long> {
 
-	Optional<Registro> findByIdUsuario(Long idUser);
+
 
 	Page<Registro> findByStatusRegistro(StatusRegistro statusRegistro, Pageable paginacao);
 
