@@ -18,9 +18,10 @@ import javax.persistence.Table;
 public class Usuario {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-
 	private Long id;
 
+	private String nome;
+	
 	@OneToOne(mappedBy = "usuario",
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
@@ -28,72 +29,45 @@ public class Usuario {
 	
 	private int numeroDePedidos;
 
-
-	private String nome;
-
-
 	public Usuario () {
 
 	}
-	
 	
 	public Usuario(String nome) {
 		this.nome = nome;
 	}
 
-
-	
-	
 	public Long getId() {
 		return id;
 	}
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
 	public Endereco getEndereco() {
 		return endereco;
 	}
-
 
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
 
-
 	public String getNome() {
 		return nome;
 	}
-
 
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-
 	public int getNumeroDePedidos() {
 		return numeroDePedidos;
 	}
 
-
 	public void setNumeroDePedidos(int numeroDePedidos) {
 		this.numeroDePedidos = numeroDePedidos;
 	}
-
-
-	
-	
-	
-
-
-
-
-
-
-
 
 }
 

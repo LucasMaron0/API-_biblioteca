@@ -109,6 +109,7 @@ public class UsuarioDto {
 	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
+
 	
 	
 	

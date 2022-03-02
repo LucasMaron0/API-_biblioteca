@@ -2,18 +2,33 @@ package compass.microservice.usuario.controller.form;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import compass.microservice.usuario.modelo.Endereco;
 
 public class BuscarLivroProximoForm {
 	
-	
+	@NotEmpty @NotNull
 	private Long userId;
+	
 	private List<String> nomeLivros;
 	
+	@NotEmpty @NotNull @Length(message = "Inserir sigla do estado", max = 2)
 	private String estado;
+	
+	@NotEmpty @NotNull
 	private String cidade;
+	
+	@NotEmpty @NotNull
 	private String bairro;
+	
+	@NotEmpty @NotNull
 	private String rua;
+	
+	@NotEmpty @NotNull @Length(message = "Inserir, ao menos, '0'", min = 1)
 	private int numero;
 	
 	public BuscarLivroProximoForm() {

@@ -2,10 +2,17 @@ package compass.microservice.usuario.controller.form;
 
 import java.util.List;
 
-public class PedirLivroForm {
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+public class PedirLivroForm {
+	
+	@NotEmpty @NotNull
 	private Long idUser;
+	
+	@NotEmpty @NotNull
 	private Long idBiblioteca;
+	
 	private List<Long> idLivros;
 	
 	public PedirLivroForm() {

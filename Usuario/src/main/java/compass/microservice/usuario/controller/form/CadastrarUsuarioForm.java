@@ -1,5 +1,10 @@
 package compass.microservice.usuario.controller.form;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
 import compass.microservice.usuario.modelo.Endereco;
 import compass.microservice.usuario.modelo.Estado;
 import compass.microservice.usuario.modelo.Usuario;
@@ -7,17 +12,22 @@ import compass.microservice.usuario.modelo.Usuario;
 public class CadastrarUsuarioForm {
 
 
-
+	@NotEmpty @NotNull
 	private String nome;
-
+	
+	@NotEmpty @NotNull @Length(message = "Inserir sigla do estado", max = 2)
 	private Estado estado;
-
+	
+	@NotEmpty @NotNull
 	private String cidade;
-
+	
+	@NotEmpty @NotNull
 	private String bairro;
-
+	
+	@NotEmpty @NotNull
 	private String rua;
-
+	
+	@NotEmpty @NotNull @Length(message = "Inserir, ao menos, '0'", min = 1)
 	private int numero;
 
 
