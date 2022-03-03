@@ -143,9 +143,9 @@ public class UsuarioController {
 
 	
 	@GetMapping("/registros/{idUsuario}")
-	public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
-		return uService.listarRegistrosPorUsuario(idUsuario);
-	}
+		public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
+			return uService.listarRegistrosPorUsuario(idUsuario);
+		}
 	
 	@PutMapping("/{id}")
 	@Transactional

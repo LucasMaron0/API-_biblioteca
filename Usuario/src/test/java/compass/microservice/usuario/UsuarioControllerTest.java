@@ -2,6 +2,9 @@ package compass.microservice.usuario;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.aspectj.lang.annotation.Before;
@@ -10,10 +13,13 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import compass.microservice.usuario.controller.UsuarioController;
+import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.UsuarioDto;
 import compass.microservice.usuario.controller.form.CadastrarUsuarioForm;
 import compass.microservice.usuario.modelo.Usuario;
@@ -41,7 +47,7 @@ public class UsuarioControllerTest{
     @InjectMocks
     private UsuarioController usuarioController;
 
-    @Before(value = "usuarios")
+    @Before(value = "cadastrarUsuario")
     public ResponseEntity<?> cadastrarUsuario(@RequestBody @Valid CadastrarUsuarioForm form){
 
 		Usuario usuario = form.converter();
@@ -55,5 +61,18 @@ public class UsuarioControllerTest{
     	assertNotNull(new UsuarioDto());
     }
 
-
+    @Before(value = "livrosBiblioteca")
+    public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
+		return uService.listarLivros(id);
+	}
+    	
+    @Test
+    public void livrosBibliotecaTest() {
+    	List<LivroDto> livros = new ArrayList<LivroDto>();
+    	livros.add(new LivroDto());
+    	
+    	assertNotNull(livros);
+    	
+    }
+    
 }
