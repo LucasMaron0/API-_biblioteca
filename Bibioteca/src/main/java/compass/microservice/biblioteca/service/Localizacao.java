@@ -84,12 +84,13 @@ public class Localizacao {
 	}
 
 
-	public Livro livroMaisProximo(ReceberEnderecoUsuario usuarioEnd, List<Livro> livros, boolean mostarIndisponiveis) throws Exception {
+	public Livro livroMaisProximo(ReceberEnderecoUsuario usuarioEnd, List<Livro> livros, Boolean mostarIndisponiveis) throws Exception {
 
 		List<Biblioteca> bibliotecas = new ArrayList<Biblioteca>();
 		HashMap<Long, Livro> relacao = new HashMap<>();
 
 		if(!mostarIndisponiveis) {
+
 			for(Livro l: livros) {
 				if(l.getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
 					bibliotecas.add(l.getBiblioteca());
@@ -121,7 +122,7 @@ public class Localizacao {
 				}
 			}
 
-			return livroMaisProximo;
+
 		}
 		return livroMaisProximo;
 

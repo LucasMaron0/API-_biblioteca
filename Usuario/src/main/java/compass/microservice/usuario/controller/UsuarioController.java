@@ -1,6 +1,8 @@
 package compass.microservice.usuario.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
+import compass.microservice.usuario.controller.dto.ErroBuscaLivroDto;
 import compass.microservice.usuario.controller.dto.InfoLocLivroDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RegistroDto;
@@ -99,7 +102,15 @@ public class UsuarioController {
 	public ResponseEntity<?> remover(@PathVariable Long id) {
 		Optional<Usuario> optional = uRepo.findById(id);
 		if (optional.isPresent()) {
-			if (optional.get().getNumeroDePedidos() >= 1) {
+			List<RegistroDto> registros  = listarRegistrosPorUsuario(optional.get().getId());
+			Boolean deletavel = true;
+
+			for (RegistroDto r : registros) {
+				if (r.getStatusRegistro().equals("EM_ANDAMENTO")) {
+					deletavel = false;
+				}
+			}
+			if (!deletavel) {
 				return ResponseEntity.badRequest().body("Não é possível excluir um usuário com pedidos em andamento.");
 			} else {
 				uRepo.deleteById(id);
@@ -118,15 +129,7 @@ public class UsuarioController {
 		if (optional.isPresent()) {
 			RetornoPedidoDto retorno = uService.pedirLivros(form);
 
-			if (retorno.getStatus().equals("Pedido Realizado com sucesso")) {
-
-				int numeroPedidos = optional.get().getNumeroDePedidos() + 1;
-				optional.get().setNumeroDePedidos(numeroPedidos);
-				return ResponseEntity.ok().body(retorno);
-			} else {
-
-				return ResponseEntity.ok().body(retorno);
-			}
+			return ResponseEntity.ok().body(retorno);
 		}
 
 		return ResponseEntity.badRequest().body("Usuario não existe");
@@ -180,30 +183,25 @@ public class UsuarioController {
 
 	@PostMapping("/pedidoAvancado/{id}")
 	@Transactional
-	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
+	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ) throws ClassNotFoundException{
 
 		Optional<Usuario> op = uRepo.findById(id);
 		if (op.isPresent()) {
 			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
 					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
 
-			List<RetornoPedidoDto> livros = uService.pedidoAvancado(form);
+			HashMap<String, List<Object>> retorno = uService.pedidoAvancado(form);
 
-			if(livros.isEmpty()) {
-				return ResponseEntity.badRequest().body("Não foi possível realizar nenhum pedido");
-			}		
-			else {
-				int numeroPedidos = op.get().getNumeroDePedidos();
-				for (RetornoPedidoDto r : livros) {
-					if (r.getStatus().equals("Pedido Realizado com sucesso")) {
-						numeroPedidos++;
-					}
-				}
-				op.get().setNumeroDePedidos(numeroPedidos);
+			List<Object> pedidos = retorno.get("pedidos");
+			List<Object> erros =  retorno.get("erros");
 
 
-				return ResponseEntity.ok().body(livros);
-			}
+			List<Object> respostas = new ArrayList<>();
+			respostas.addAll(pedidos);
+			respostas.addAll(erros);
+
+			return ResponseEntity.ok().body(respostas);
+
 		}
 		return ResponseEntity.badRequest().body("Usuario não existe");
 	}
