@@ -1,35 +1,35 @@
 package compass.microservice.biblioteca.controller.form;
 
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Endereco;
 import compass.microservice.biblioteca.modelos.Estado;
-import compass.microservice.biblioteca.modelos.Livro;
 
 
 public class CadastrarBibliotecaForm {
 	
-	
+	@NotNull @NotEmpty
 	private String nome;
 	
-
+	@NotEmpty @NotNull @Length(message = "Inserir sigla do estado", max = 2)
 	private Estado estado;
-
+	
+	@NotEmpty @NotNull
 	private String cidade;
-
+	
+	@NotEmpty @NotNull
 	private String bairro;
 
+	@NotEmpty @NotNull
 	private String rua;
 
+	@NotEmpty @NotNull @Length(message = "Inserir, ao menos, '0'", min = 1)
 	private int numero;
 
-	
-	
-	
-	
 	public CadastrarBibliotecaForm() {
 		
 	}
@@ -42,7 +42,6 @@ public class CadastrarBibliotecaForm {
 		biblioteca.setEndereco(end);
 		
 		return biblioteca;
-		
 	}
 	
 	public Biblioteca atualizar(Biblioteca b) {

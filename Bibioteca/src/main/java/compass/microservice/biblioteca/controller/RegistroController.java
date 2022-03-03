@@ -1,6 +1,5 @@
 package compass.microservice.biblioteca.controller;
 
-
 import java.util.List;
 import java.util.Objects;
 
@@ -44,15 +43,6 @@ public class RegistroController {
 	@Autowired
 	private BibliotecaService bService;
 
-	@PutMapping("/encerrar/{id}")
-	@Transactional
-	public ResponseEntity<?> encerrarRegistro(@PathVariable Long id) {
-
-		ResponseEntity<?> encPedido = bService.encerrarPedido(id);
-
-		return ResponseEntity.ok(encPedido);
-	}
-
 	@GetMapping
 	public Page<RegistroDto> registroLivros(@RequestParam(required = false) StatusRegistro statusRegistro,
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
@@ -65,7 +55,6 @@ public class RegistroController {
 		}
 
 	}
-
 
 	@GetMapping("/checkarMultas")
 	public List<Registro> checkarMultas(){
@@ -81,5 +70,12 @@ public class RegistroController {
 		return null;
 	}
 
+	@PutMapping("/encerrar/{id}")
+	@Transactional
+	public ResponseEntity<?> encerrarRegistro(@PathVariable Long id) {
 
+		ResponseEntity<?> encPedido = bService.encerrarPedido(id);
+
+		return ResponseEntity.ok(encPedido);
+	}
 }
