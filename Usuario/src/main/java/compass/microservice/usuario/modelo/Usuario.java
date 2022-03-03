@@ -28,6 +28,7 @@ public class Usuario {
 	private Endereco endereco;
 
 
+
 	public Usuario () {
 
 	}
@@ -35,6 +36,7 @@ public class Usuario {
 	public Usuario(String nome) {
 		this.nome = nome;
 	}
+
 
 
 	public Long getId() {

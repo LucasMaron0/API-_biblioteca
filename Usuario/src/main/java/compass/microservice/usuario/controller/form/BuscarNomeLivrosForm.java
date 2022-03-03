@@ -5,6 +5,8 @@ import java.util.List;
 public class BuscarNomeLivrosForm {
 	
 	private List<String> nomeLivros;
+	
+	private boolean mostrarIndisponiveis;
 
 	private boolean mostrarIndisponiveis;
 
