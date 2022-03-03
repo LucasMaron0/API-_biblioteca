@@ -61,8 +61,12 @@ public class BibliotecaServiceController {
 		return bService.getByIdUsuario(idUsuario);
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/livro-mais-proximo")
-	public List<InfoLocLivroDto> listarRegistrosPorUsuario(@RequestBody BuscarLivroProximoForm form) throws Exception {
+	public List<InfoLocLivroDto> livroMaisProximo(@RequestBody BuscarLivroProximoForm form) throws Exception {
 		return bService.buscarLivroProximo(form);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/pedido-avancado")
+	public List<RequestPedirLivroDto> pedidoAvancado(@RequestBody BuscarLivroProximoForm form) throws Exception {
+		return bService.pedidoAvancado(form);
 	}
 
 }

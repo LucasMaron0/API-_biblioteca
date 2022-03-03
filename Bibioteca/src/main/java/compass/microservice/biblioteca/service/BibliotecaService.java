@@ -208,21 +208,21 @@ public class BibliotecaService {
 				Localizacao loc = new Localizacao();
 				ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
 
-				Livro livroMaisProximo = loc.livroMaisProximo(usuarioEnd, livros);
+				Optional<Livro> opLivroMaisProximo = Optional.ofNullable(loc.livroMaisProximo(usuarioEnd, livros,form.isMostrarIndisponiveis()));
 
-				InfoLocLivroDto info = new InfoLocLivroDto(livroMaisProximo, livroMaisProximo.getBiblioteca());
-				livrosMaisProximos.add(info);
+				if(opLivroMaisProximo.isPresent()) {
+					Livro livroMaisProximo = opLivroMaisProximo.get();
+					InfoLocLivroDto info = new InfoLocLivroDto(livroMaisProximo, livroMaisProximo.getBiblioteca());
+					livrosMaisProximos.add(info);
+				}
 
-			}else if (livros.isEmpty())  {
 
-				InfoLocLivroDto info = new InfoLocLivroDto(s);
-				livrosMaisProximos.add(info);
-
-			}else{
+			}else if (!livros.isEmpty())  {
 
 				Livro livro = livros.get(0);
 				InfoLocLivroDto info = new InfoLocLivroDto(livro, livro.getBiblioteca());
 				livrosMaisProximos.add(info);
+
 			}
 		}
 
@@ -232,5 +232,67 @@ public class BibliotecaService {
 
 	}
 
+	public List<RequestPedirLivroDto> pedidoAvancado(BuscarLivroProximoForm form) throws Exception {
+
+		HashMap<Long, List<Livro>> livrosPedidos = new HashMap<>();
+
+		for (String s: form.getNomeLivros()) {
+			List<Livro> livros = lRepo.findByNome(s);
+			Livro livroMaisProximo = null;
+
+			if (livros.size()>=2) {
+				Localizacao loc = new Localizacao();
+				ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
+
+				Optional<Livro> opLivroMaisProximo = Optional.ofNullable(loc.livroMaisProximo(usuarioEnd, livros, false));
+				if(opLivroMaisProximo.isPresent()) {
+					livroMaisProximo = opLivroMaisProximo.get();
+				}
+
+			}else if (!livros.isEmpty())  {
+
+				livroMaisProximo = livros.get(0);
+			}
+
+			if(!(livroMaisProximo == null)) {
+
+				Optional<List<Livro>> mapList = Optional.ofNullable(livrosPedidos.get(livroMaisProximo.getBiblioteca().getId()));
+
+				if(mapList.isPresent()) {
+					mapList.get().add(livroMaisProximo);
+					livrosPedidos.put(livroMaisProximo.getBiblioteca().getId(), mapList.get());
+				}else {
+					List<Livro> newMapList = new ArrayList<>();
+					newMapList.add(livroMaisProximo);
+					livrosPedidos.put(livroMaisProximo.getBiblioteca().getId(), newMapList);
+				}
+			}
+		}
+
+		List<RequestPedirLivroDto> pedidosRealizados = new ArrayList<>();
+		if(!livrosPedidos.isEmpty()) {
+
+
+
+			for (Map.Entry<Long, List<Livro>> entry: livrosPedidos.entrySet()) {
+				RequestPedirLivros pedido = new  RequestPedirLivros ();
+				List<Long> idLivros = new ArrayList<>();
+
+				for (Livro l : entry.getValue()) {
+					idLivros.add(l.getId());		
+				}
+
+				pedido.setIdBiblioteca(entry.getKey());
+				pedido.setIdLivros(idLivros);
+				pedido.setIdUser(form.getUserId());
+
+
+				pedidosRealizados.add(pedirLivros(pedido).getBody());
+			}
+
+
+		}
+		return pedidosRealizados;
+	}
 
 }

@@ -42,4 +42,7 @@ public interface BibliotecaClient {
 	@RequestMapping(method = RequestMethod.POST, value = "/service/livro-mais-proximo")
 	List<InfoLocLivroDto> buscarLivroProximo(BuscarLivroProximoForm form);
 
+	@RequestMapping(method = RequestMethod.POST, value = "/service/pedido-avancado")
+	List<RetornoPedidoDto> pedidoAvancado(BuscarLivroProximoForm form);
+
 }

@@ -139,7 +139,7 @@ public class UsuarioController {
 		return uService.listarLivros(id);
 	}
 
-	@PostMapping("/buscarBiblioteca/{userId}")
+	@GetMapping("/buscarBiblioteca/{userId}")
 	public ResponseEntity<?> buscarBiblioMaisProxima (@PathVariable long userId) {
 		Optional<Usuario> optional = uRepo.findById(userId);
 		if (optional.isPresent()) {
@@ -158,19 +158,52 @@ public class UsuarioController {
 		return uService.listarRegistrosPorUsuario(idUsuario);
 	}
 
-	@PostMapping("/buscarLivroProximo/{id}")
+	@GetMapping("/buscarLivroProximo/{id}")
 	public ResponseEntity<?> buscarLivroProximo (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
 
 		Optional<Usuario> op = uRepo.findById(id);
 		if (op.isPresent()) {
 			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
-					op.get().getEndereco(), nomeLivros.getNomeLivros());
+					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
 
 
 
 			List<InfoLocLivroDto> livros = uService.buscarLivroProximo(form);
-			return ResponseEntity.ok().body(livros);
+			if(livros.isEmpty()) {
+				return ResponseEntity.badRequest().body("Nenhum livro foi encontrado");
+			}else {
+				return ResponseEntity.ok().body(livros);
+			}
+		}
+		return ResponseEntity.badRequest().body("Usuario não existe");
+	}
 
+	@PostMapping("/pedidoAvancado/{id}")
+	@Transactional
+	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
+
+		Optional<Usuario> op = uRepo.findById(id);
+		if (op.isPresent()) {
+			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
+					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
+
+			List<RetornoPedidoDto> livros = uService.pedidoAvancado(form);
+
+			if(livros.isEmpty()) {
+				return ResponseEntity.badRequest().body("Não foi possível realizar nenhum pedido");
+			}		
+			else {
+				int numeroPedidos = op.get().getNumeroDePedidos();
+				for (RetornoPedidoDto r : livros) {
+					if (r.getStatus().equals("Pedido Realizado com sucesso")) {
+						numeroPedidos++;
+					}
+				}
+				op.get().setNumeroDePedidos(numeroPedidos);
+
+
+				return ResponseEntity.ok().body(livros);
+			}
 		}
 		return ResponseEntity.badRequest().body("Usuario não existe");
 	}
