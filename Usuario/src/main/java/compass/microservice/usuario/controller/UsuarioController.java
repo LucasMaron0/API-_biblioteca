@@ -88,62 +88,10 @@ public class UsuarioController {
 		}
 
 		return ResponseEntity.badRequest().body("Usuario não existe");
-
-
-	@DeleteMapping("/{id}")
-	@Transactional
-	public ResponseEntity<?> remover(@PathVariable Long id) {
-		Optional<Usuario> optional = uRepo.findById(id);
-		if (optional.isPresent()) {
-			List<RegistroDto> registros  = listarRegistrosPorUsuario(optional.get().getId());
-			Boolean deletavel = true;
-
-			for (RegistroDto r : registros) {
-				if (r.getStatusRegistro().equals("EM_ANDAMENTO")) {
-					deletavel = false;
-				}
-			}
-			if (!deletavel) {
-				return ResponseEntity.badRequest().body("Não é possível excluir um usuário com pedidos em andamento.");
-			} else {
-				uRepo.deleteById(id);
-				return ResponseEntity.ok().build();
-			}
-		}
-		return ResponseEntity.notFound().build();
-
-	}
-
-	@PostMapping("/pedidoAvancado/{id}")
-	@Transactional
-	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
-
-		Optional<Usuario> op = uRepo.findById(id);
-		if (op.isPresent()) {
-			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
-					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
-
-			HashMap<String, List<Object>> retorno = uService.pedidoAvancado(form);
-
-
-			List<Object> pedidos = retorno.get("pedidos");
-			List<Object> erros =  retorno.get("erros");
-
-
-			List<Object> respostas = new ArrayList<>();
-			respostas.addAll(pedidos);
-			respostas.addAll(erros);
-
-			return ResponseEntity.ok().body(respostas);
-			;
-		}
-
-
-		}
-		return ResponseEntity.badRequest().body("Usuario não existe");
 	}
 
 
+	
 
 	@GetMapping
 	public Page<UsuarioDto> listAllUsuarios(
