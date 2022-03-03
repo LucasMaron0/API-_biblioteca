@@ -72,6 +72,61 @@ public class UsuarioController {
 
 	}
 
+	@PostMapping("/pedido")
+	@Transactional
+	public ResponseEntity<?> pedirlivro(@RequestBody @Valid PedirLivroForm form) {
+
+		Optional<Usuario> optional = uRepo.findById(form.getIdUser());
+
+		if (optional.isPresent()) {
+			RetornoPedidoDto retorno = uService.pedirLivros(form);
+
+			if (retorno.getStatus().equals("Pedido Realizado com sucesso")) {
+
+				int numeroPedidos = optional.get().getNumeroDePedidos() + 1;
+				optional.get().setNumeroDePedidos(numeroPedidos);
+				return ResponseEntity.ok().body(retorno);
+			} else {
+
+				return ResponseEntity.ok().body(retorno);
+			}
+		}
+
+		return ResponseEntity.badRequest().body("Usuario não existe");
+
+	}
+	
+	@PostMapping("/buscarBiblioteca/{userId}")
+	public ResponseEntity<?> buscarBiblioMaisProxima (@PathVariable long userId) {
+		Optional<Usuario> optional = uRepo.findById(userId);
+		if (optional.isPresent()) {
+
+			MandarEnderecoUsuario end = new MandarEnderecoUsuario(userId, optional.get().getEndereco()); 
+			EndBibliotecaDto retorno = uService.buscarBibliMaisProxima(end);
+
+			return ResponseEntity.ok(retorno);
+		}
+
+		return ResponseEntity.badRequest().body("Usuario não existe");
+	}
+	
+	@PostMapping("/buscarLivroProximo/{id}")
+	public ResponseEntity<?> buscarLivroProximo (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
+
+		Optional<Usuario> op = uRepo.findById(id);
+		if (op.isPresent()) {
+			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
+					op.get().getEndereco(), nomeLivros.getNomeLivros());
+
+
+
+			List<InfoLocLivroDto> livros = uService.buscarLivroProximo(form);
+			return ResponseEntity.ok().body(livros);
+
+		}
+		return ResponseEntity.badRequest().body("Usuario não existe");
+	}
+	
 	@GetMapping
 	public Page<UsuarioDto> listAllUsuarios(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
@@ -81,6 +136,17 @@ public class UsuarioController {
 
 	}
 
+	@GetMapping("/livros/{id}")
+	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
+		return uService.listarLivros(id);
+	}
+
+	
+	@GetMapping("/registros/{idUsuario}")
+	public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
+		return uService.listarRegistrosPorUsuario(idUsuario);
+	}
+	
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<UsuarioDto> atualizar(@PathVariable Long id, @RequestBody @Valid CadastrarUsuarioForm form) {
@@ -108,73 +174,6 @@ public class UsuarioController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-
-	@PostMapping("/pedido")
-	@Transactional
-	public ResponseEntity<?> pedirlivro(@RequestBody @Valid PedirLivroForm form) {
-
-		Optional<Usuario> optional = uRepo.findById(form.getIdUser());
-
-		if (optional.isPresent()) {
-			RetornoPedidoDto retorno = uService.pedirLivros(form);
-
-			if (retorno.getStatus().equals("Pedido Realizado com sucesso")) {
-
-				int numeroPedidos = optional.get().getNumeroDePedidos() + 1;
-				optional.get().setNumeroDePedidos(numeroPedidos);
-				return ResponseEntity.ok().body(retorno);
-			} else {
-
-				return ResponseEntity.ok().body(retorno);
-			}
-		}
-
-		return ResponseEntity.badRequest().body("Usuario não existe");
-
-	}
-
-	@GetMapping("/livros/{id}")
-
-	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
-		return uService.listarLivros(id);
-	}
-
-	@PostMapping("/buscarBiblioteca/{userId}")
-	public ResponseEntity<?> buscarBiblioMaisProxima (@PathVariable long userId) {
-		Optional<Usuario> optional = uRepo.findById(userId);
-		if (optional.isPresent()) {
-
-			MandarEnderecoUsuario end = new MandarEnderecoUsuario(userId, optional.get().getEndereco()); 
-			EndBibliotecaDto retorno = uService.buscarBibliMaisProxima(end);
-
-			return ResponseEntity.ok(retorno);
-		}
-
-		return ResponseEntity.badRequest().body("Usuario não existe");
-	}
-
-	@GetMapping("/registros/{idUsuario}")
-	public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
-		return uService.listarRegistrosPorUsuario(idUsuario);
-	}
-
-	@PostMapping("/buscarLivroProximo/{id}")
-	public ResponseEntity<?> buscarLivroProximo (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
-
-		Optional<Usuario> op = uRepo.findById(id);
-		if (op.isPresent()) {
-			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
-					op.get().getEndereco(), nomeLivros.getNomeLivros());
-
-
-
-			List<InfoLocLivroDto> livros = uService.buscarLivroProximo(form);
-			return ResponseEntity.ok().body(livros);
-
-		}
-		return ResponseEntity.badRequest().body("Usuario não existe");
-	}
-
 
 }
 
