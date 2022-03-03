@@ -76,6 +76,10 @@ public class UsuarioService {
 
 		return bClient.buscarLivroProximo(form);
 	}
+	
+	public List<RetornoPedidoDto> pedidoAvancado(BuscarLivroProximoForm form) {
+		return bClient.pedidoAvancado(form);
+	}
 	//Recebe
 
 	public boolean encerrarRegistro(EncerrarPedidoDto encPedido) {
@@ -94,6 +98,8 @@ public class UsuarioService {
 			return false;
 		}
 	}
+
+	
 
 
 

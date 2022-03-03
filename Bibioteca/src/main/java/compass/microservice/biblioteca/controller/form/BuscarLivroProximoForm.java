@@ -17,15 +17,17 @@ public class BuscarLivroProximoForm {
 	private String bairro;
 	private String rua;
 	private int numero;
-	
-	
+
+	private boolean mostrarIndisponiveis;
+
+
 	public BuscarLivroProximoForm() {
-		
+
 	}
 
 
 
-	public BuscarLivroProximoForm(long id, Endereco endereco, List<String> nomeLivros) {
+	public BuscarLivroProximoForm(long id, Endereco endereco, List<String> nomeLivros, boolean mostrarIndisponiveis) {
 
 		this.userId = id;
 		this.nomeLivros = nomeLivros;
@@ -34,6 +36,8 @@ public class BuscarLivroProximoForm {
 		this.bairro=endereco.getBairro();
 		this.rua= endereco.getRua();
 		this.numero = endereco.getNumero();
+
+		this.mostrarIndisponiveis = mostrarIndisponiveis;
 
 
 	}
@@ -97,4 +101,17 @@ public class BuscarLivroProximoForm {
 	public void setNomeLivros(List<String> nomeLivros) {
 		this.nomeLivros = nomeLivros;
 	}
+
+
+
+	public boolean isMostrarIndisponiveis() {
+		return mostrarIndisponiveis;
+	}
+
+
+
+	public void setMostrarIndisponiveis(boolean mostrarIndisponiveis) {
+		this.mostrarIndisponiveis = mostrarIndisponiveis;
+	}
+
 }
