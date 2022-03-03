@@ -56,7 +56,7 @@ public class BibliotecaController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<BibliotecaDto> cadastrarBiblioteca(@RequestBody CadastrarBibliotecaForm form,
+	public ResponseEntity<BibliotecaDto> cadastrarBiblioteca(@RequestBody @Valid CadastrarBibliotecaForm form,
 			UriComponentsBuilder uriBuilder) {
 
 		Biblioteca biblioteca = form.converter();

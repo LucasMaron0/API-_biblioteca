@@ -7,10 +7,10 @@ import javax.validation.constraints.NotNull;
 
 public class PedirLivroForm {
 	
-	@NotEmpty @NotNull
+	
 	private Long idUser;
 	
-	@NotEmpty @NotNull
+	
 	private Long idBiblioteca;
 	
 	private List<Long> idLivros;

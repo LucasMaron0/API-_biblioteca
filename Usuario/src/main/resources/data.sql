@@ -1,1 +1,0 @@
-INSERT INTO USUARIO(nome, numero_de_pedidos) VALUES('Teste', 0);

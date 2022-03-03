@@ -28,9 +28,6 @@ public class Usuario {
 	private Endereco endereco;
 
 
-	private String nome;
-
-
 	public Usuario () {
 
 	}
