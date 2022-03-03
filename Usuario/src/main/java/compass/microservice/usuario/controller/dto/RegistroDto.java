@@ -13,6 +13,8 @@ public class RegistroDto {
 	private LocalDate dataLocacao;
 
 	private LocalDate dataVencimento;
+	
+	private double multaGerada;
 
 	public RegistroDto() {
 
@@ -57,5 +59,14 @@ public class RegistroDto {
 	public void setDataVencimento(LocalDate dataVencimento) {
 		this.dataVencimento = dataVencimento;
 	}
+
+	public double getMultaGerada() {
+		return multaGerada;
+	}
+
+	public void setMultaGerada(double multaGerada) {
+		this.multaGerada = multaGerada;
+	}
+	
 
 }

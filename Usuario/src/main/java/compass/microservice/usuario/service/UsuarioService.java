@@ -1,5 +1,6 @@
 package compass.microservice.usuario.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,8 +77,8 @@ public class UsuarioService {
 
 		return bClient.buscarLivroProximo(form);
 	}
-	
-	public List<RetornoPedidoDto> pedidoAvancado(BuscarLivroProximoForm form) {
+
+	public HashMap<String, List<Object>> pedidoAvancado(BuscarLivroProximoForm form) {
 		return bClient.pedidoAvancado(form);
 	}
 	//Recebe
@@ -86,11 +87,7 @@ public class UsuarioService {
 
 		Optional<Usuario> optUsuario = uRepo.findById(encPedido.getIdUser());
 		if (optUsuario.isPresent()) {
-			Usuario usuario =  optUsuario.get();
 
-			int numeroPedidos = usuario.getNumeroDePedidos() - 1;
-			usuario.setNumeroDePedidos(numeroPedidos);
-			uRepo.save(usuario);
 			return true;
 
 
@@ -99,7 +96,7 @@ public class UsuarioService {
 		}
 	}
 
-	
+
 
 
 

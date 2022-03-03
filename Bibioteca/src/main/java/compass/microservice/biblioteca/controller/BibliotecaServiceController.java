@@ -1,5 +1,6 @@
 package compass.microservice.biblioteca.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,8 @@ import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
 import compass.microservice.biblioteca.controller.dto.InfoLocLivroDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RegistroDto;
-import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
+import compass.microservice.biblioteca.controller.dto.RetornoPedidoDto;
 import compass.microservice.biblioteca.controller.form.BuscarLivroProximoForm;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
@@ -35,7 +36,7 @@ public class BibliotecaServiceController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/pedido")
-	public ResponseEntity<RequestPedirLivroDto> pedirLivros(@RequestBody RequestPedirLivros form) {
+	public ResponseEntity<RetornoPedidoDto> pedirLivros(@RequestBody RequestPedirLivros form) {
 		return bService.pedirLivros(form);
 	}
 
@@ -58,7 +59,7 @@ public class BibliotecaServiceController {
 		return bService.buscarLivroProximo(form);
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/pedido-avancado")
-	public List<RequestPedirLivroDto> pedidoAvancado(@RequestBody BuscarLivroProximoForm form) throws Exception {
+	public HashMap<String, List<Object>> pedidoAvancado(@RequestBody BuscarLivroProximoForm form) throws Exception {
 		return bService.pedidoAvancado(form);
 	}
 
