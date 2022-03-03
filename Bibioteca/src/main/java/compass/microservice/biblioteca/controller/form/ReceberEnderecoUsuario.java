@@ -7,22 +7,22 @@ import org.hibernate.validator.constraints.Length;
 
 public class ReceberEnderecoUsuario {
 	
-	@NotNull @NotEmpty
+	
 	private Long userId;
 	
-	@NotEmpty @NotNull @Length(message = "Inserir sigla do estado", max = 2)
+	
 	private String estado;
 	
-	@NotNull @NotEmpty
+	
 	private String cidade;
 	
-	@NotNull @NotEmpty
+	
 	private String bairro;
 	
-	@NotNull @NotEmpty
+	
 	private String rua;
 	
-	@NotEmpty @NotNull @Length(message = "Inserir, ao menos, '0'", min = 1)
+	
 	private int numero;
 
 	public ReceberEnderecoUsuario() {

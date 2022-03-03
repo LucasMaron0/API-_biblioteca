@@ -1,6 +1,8 @@
 package compass.microservice.usuario.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
+import compass.microservice.usuario.controller.dto.ErroBuscaLivroDto;
 import compass.microservice.usuario.controller.dto.InfoLocLivroDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RegistroDto;
@@ -81,22 +84,83 @@ public class UsuarioController {
 		if (optional.isPresent()) {
 			RetornoPedidoDto retorno = uService.pedirLivros(form);
 
-			if (retorno.getStatus().equals("Pedido Realizado com sucesso")) {
-
-				int numeroPedidos = optional.get().getNumeroDePedidos() + 1;
-				optional.get().setNumeroDePedidos(numeroPedidos);
-				return ResponseEntity.ok().body(retorno);
-			} else {
-
-				return ResponseEntity.ok().body(retorno);
-			}
+			return ResponseEntity.ok().body(retorno);
 		}
 
 		return ResponseEntity.badRequest().body("Usuario não existe");
 
+
+	@DeleteMapping("/{id}")
+	@Transactional
+	public ResponseEntity<?> remover(@PathVariable Long id) {
+		Optional<Usuario> optional = uRepo.findById(id);
+		if (optional.isPresent()) {
+			List<RegistroDto> registros  = listarRegistrosPorUsuario(optional.get().getId());
+			Boolean deletavel = true;
+
+			for (RegistroDto r : registros) {
+				if (r.getStatusRegistro().equals("EM_ANDAMENTO")) {
+					deletavel = false;
+				}
+			}
+			if (!deletavel) {
+				return ResponseEntity.badRequest().body("Não é possível excluir um usuário com pedidos em andamento.");
+			} else {
+				uRepo.deleteById(id);
+				return ResponseEntity.ok().build();
+			}
+		}
+		return ResponseEntity.notFound().build();
+
 	}
-	
-	@PostMapping("/buscarBiblioteca/{userId}")
+
+	@PostMapping("/pedidoAvancado/{id}")
+	@Transactional
+	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
+
+		Optional<Usuario> op = uRepo.findById(id);
+		if (op.isPresent()) {
+			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
+					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
+
+			HashMap<String, List<Object>> retorno = uService.pedidoAvancado(form);
+
+
+			List<Object> pedidos = retorno.get("pedidos");
+			List<Object> erros =  retorno.get("erros");
+
+
+			List<Object> respostas = new ArrayList<>();
+			respostas.addAll(pedidos);
+			respostas.addAll(erros);
+
+			return ResponseEntity.ok().body(respostas);
+			;
+		}
+
+
+		}
+		return ResponseEntity.badRequest().body("Usuario não existe");
+	}
+
+
+
+	@GetMapping
+	public Page<UsuarioDto> listAllUsuarios(
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
+
+		Page<Usuario> usuarios = uRepo.findAll(paginacao);
+		return UsuarioDto.converter(usuarios);
+
+	}
+
+
+	@GetMapping("/livros/{id}")
+	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
+		return uService.listarLivros(id);
+	}
+
+	@GetMapping("/buscarBiblioteca/{userId}")
 	public ResponseEntity<?> buscarBiblioMaisProxima (@PathVariable long userId) {
 		Optional<Usuario> optional = uRepo.findById(userId);
 		if (optional.isPresent()) {
@@ -109,44 +173,61 @@ public class UsuarioController {
 
 		return ResponseEntity.badRequest().body("Usuario não existe");
 	}
-	
-	@PostMapping("/buscarLivroProximo/{id}")
+
+	@GetMapping("/registros/{idUsuario}")
+	public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
+		return uService.listarRegistrosPorUsuario(idUsuario);
+	}
+
+	@GetMapping("/buscarLivroProximo/{id}")
+
 	public ResponseEntity<?> buscarLivroProximo (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
 
 		Optional<Usuario> op = uRepo.findById(id);
 		if (op.isPresent()) {
 			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
-					op.get().getEndereco(), nomeLivros.getNomeLivros());
+					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
 
 
 
 			List<InfoLocLivroDto> livros = uService.buscarLivroProximo(form);
-			return ResponseEntity.ok().body(livros);
+			if(livros.isEmpty()) {
+				return ResponseEntity.badRequest().body("Nenhum livro foi encontrado");
+			}else {
+				return ResponseEntity.ok().body(livros);
+			}
 
 		}
 		return ResponseEntity.badRequest().body("Usuario não existe");
 	}
-	
-	@GetMapping
-	public Page<UsuarioDto> listAllUsuarios(
-			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
 
-		Page<Usuario> usuarios = uRepo.findAll(paginacao);
-		return UsuarioDto.converter(usuarios);
+	@PostMapping("/pedidoAvancado/{id}")
+	@Transactional
+	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ) throws ClassNotFoundException{
 
-	}
+		Optional<Usuario> op = uRepo.findById(id);
+		if (op.isPresent()) {
+			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
+					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
 
-	@GetMapping("/livros/{id}")
-	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
-		return uService.listarLivros(id);
-	}
+			HashMap<String, List<Object>> retorno = uService.pedidoAvancado(form);
 
-	
-	@GetMapping("/registros/{idUsuario}")
-		public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
-			return uService.listarRegistrosPorUsuario(idUsuario);
+			List<Object> pedidos = retorno.get("pedidos");
+			List<Object> erros =  retorno.get("erros");
+
+
+			List<Object> respostas = new ArrayList<>();
+			respostas.addAll(pedidos);
+			respostas.addAll(erros);
+
+			return ResponseEntity.ok().body(respostas);
+
+
 		}
-	
+		return ResponseEntity.badRequest().body("Usuario não existe");
+	}
+
+
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<UsuarioDto> atualizar(@PathVariable Long id, @RequestBody @Valid CadastrarUsuarioForm form) {
@@ -159,13 +240,21 @@ public class UsuarioController {
 
 		return ResponseEntity.notFound().build();
 	}
-
+	
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> remover(@PathVariable Long id) {
 		Optional<Usuario> optional = uRepo.findById(id);
 		if (optional.isPresent()) {
-			if (optional.get().getNumeroDePedidos() >= 1) {
+			List<RegistroDto> registros  = listarRegistrosPorUsuario(optional.get().getId());
+			Boolean deletavel = true;
+
+			for (RegistroDto r : registros) {
+				if (r.getStatusRegistro().equals("EM_ANDAMENTO")) {
+					deletavel = false;
+				}
+			}
+			if (!deletavel) {
 				return ResponseEntity.badRequest().body("Não é possível excluir um usuário com pedidos em andamento.");
 			} else {
 				uRepo.deleteById(id);
@@ -174,6 +263,9 @@ public class UsuarioController {
 		}
 		return ResponseEntity.notFound().build();
 	}
+
+
+
 
 }
 

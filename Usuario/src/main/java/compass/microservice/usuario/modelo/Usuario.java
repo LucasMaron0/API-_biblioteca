@@ -26,16 +26,18 @@ public class Usuario {
 			cascade = CascadeType.ALL,
 			orphanRemoval = true)
 	private Endereco endereco;
-	
-	private int numeroDePedidos;
+
+
 
 	public Usuario () {
 
 	}
-	
+
 	public Usuario(String nome) {
 		this.nome = nome;
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -61,13 +63,7 @@ public class Usuario {
 		this.nome = nome;
 	}
 
-	public int getNumeroDePedidos() {
-		return numeroDePedidos;
-	}
 
-	public void setNumeroDePedidos(int numeroDePedidos) {
-		this.numeroDePedidos = numeroDePedidos;
-	}
 
 }
 

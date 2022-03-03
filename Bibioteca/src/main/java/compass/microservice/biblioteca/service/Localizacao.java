@@ -12,6 +12,8 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import compass.microservice.biblioteca.controller.form.BuscarLivroProximoForm;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
@@ -82,36 +84,48 @@ public class Localizacao {
 	}
 
 
-	public Livro livroMaisProximo(ReceberEnderecoUsuario usuarioEnd, List<Livro> livros) throws Exception {
+	public Livro livroMaisProximo(ReceberEnderecoUsuario usuarioEnd, List<Livro> livros, Boolean mostarIndisponiveis) throws Exception {
 
 		List<Biblioteca> bibliotecas = new ArrayList<Biblioteca>();
 		HashMap<Long, Livro> relacao = new HashMap<>();
 
-		for (Livro l : livros) {
-			bibliotecas.add(l.getBiblioteca());
-			//garantindo, caso existam dois livros iguais em uma mesma biblioteca, que o disponivel tenha prioridade
-			if (relacao.containsKey(l.getBiblioteca().getId())) {
-				Livro livroPresente = relacao.get(l.getBiblioteca().getId());
-				if(livroPresente.getStatusLivro().equals(StatusLivro.INDISPONIVEL));{
+		if(!mostarIndisponiveis) {
+
+			for(Livro l: livros) {
+				if(l.getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
+					bibliotecas.add(l.getBiblioteca());
+					relacao.put(l.getBiblioteca().getId(), l);					
+				}
+			}
+		}else {
+			for (Livro l : livros) {
+				bibliotecas.add(l.getBiblioteca());
+				//garantindo, caso existam dois livros iguais em uma mesma biblioteca, que o disponivel tenha prioridade
+				if (relacao.containsKey(l.getBiblioteca().getId())) {
+					Livro livroPresente = relacao.get(l.getBiblioteca().getId());
+					if(livroPresente.getStatusLivro().equals(StatusLivro.INDISPONIVEL));{
+						relacao.put(l.getBiblioteca().getId(), l);
+					}
+				}else {
 					relacao.put(l.getBiblioteca().getId(), l);
 				}
-			}else {
-				relacao.put(l.getBiblioteca().getId(), l);
-			}
-
-		}				
-
-		Biblioteca bbMaisProxima = procurarBibliotecaMaisProxima(usuarioEnd , bibliotecas);
+			}				
+		}
 
 		Livro livroMaisProximo = null;
 
-		for (Map.Entry<Long, Livro> entry: relacao.entrySet()) {
-			if(entry.getKey().equals(bbMaisProxima.getId())) {
-				livroMaisProximo = entry.getValue();
+		if (!bibliotecas.isEmpty()) {
+			Biblioteca bbMaisProxima = procurarBibliotecaMaisProxima(usuarioEnd , bibliotecas);
+			for (Map.Entry<Long, Livro> entry: relacao.entrySet()) {
+				if(entry.getKey().equals(bbMaisProxima.getId())) {
+					livroMaisProximo = entry.getValue();
+				}
 			}
-		}
 
+
+		}
 		return livroMaisProximo;
+
 	}
 
 

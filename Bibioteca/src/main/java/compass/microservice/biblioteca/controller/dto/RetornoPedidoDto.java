@@ -2,7 +2,8 @@ package compass.microservice.biblioteca.controller.dto;
 
 import java.util.List;
 
-public class RequestPedirLivroDto {
+public class RetornoPedidoDto {
+
 
 	private String status;
 
@@ -13,8 +14,7 @@ public class RequestPedirLivroDto {
 	private List<Long> livriosIndisponiveis;
 
 
-
-	public RequestPedirLivroDto() {
+	public RetornoPedidoDto() {
 		super();
 	}
 
@@ -50,6 +50,12 @@ public class RequestPedirLivroDto {
 	public void setLivriosIndisponiveis(List<Long> livriosIndisponiveis) {
 		this.livriosIndisponiveis = livriosIndisponiveis;
 	}
+
+
+
+
+
+
 
 
 

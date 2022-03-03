@@ -12,22 +12,22 @@ import compass.microservice.biblioteca.modelos.Estado;
 
 public class CadastrarBibliotecaForm {
 	
-	@NotNull @NotEmpty
+
 	private String nome;
 	
-	@NotEmpty @NotNull @Length(message = "Inserir sigla do estado", max = 2)
+	
 	private Estado estado;
 	
-	@NotEmpty @NotNull
+
 	private String cidade;
 	
-	@NotEmpty @NotNull
+	
 	private String bairro;
 
-	@NotEmpty @NotNull
+	
 	private String rua;
 
-	@NotEmpty @NotNull @Length(message = "Inserir, ao menos, '0'", min = 1)
+
 	private int numero;
 
 	public CadastrarBibliotecaForm() {

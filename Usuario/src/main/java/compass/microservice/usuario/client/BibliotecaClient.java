@@ -1,5 +1,6 @@
 package compass.microservice.usuario.client;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -41,5 +42,8 @@ public interface BibliotecaClient {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/service/livro-mais-proximo")
 	List<InfoLocLivroDto> buscarLivroProximo(BuscarLivroProximoForm form);
+
+	@RequestMapping(method = RequestMethod.POST, value = "/service/pedido-avancado")
+	HashMap<String, List<Object>> pedidoAvancado(BuscarLivroProximoForm form);
 
 }

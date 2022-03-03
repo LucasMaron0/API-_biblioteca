@@ -6,10 +6,28 @@ public class BuscarNomeLivrosForm {
 	
 	private List<String> nomeLivros;
 	
+	private boolean mostrarIndisponiveis;
+
+	private boolean mostrarIndisponiveis;
+
+
+	
 	public BuscarNomeLivrosForm() {
 		
 	}
 	
+	
+	
+	
+
+	public boolean isMostrarIndisponiveis() {
+		return mostrarIndisponiveis;
+	}
+
+	public void setMostrarIndisponiveis(boolean mostrarIndisponiveis) {
+		this.mostrarIndisponiveis = mostrarIndisponiveis;
+	}
+
 	public List<String> getNomeLivros() {
 		return nomeLivros;
 	}

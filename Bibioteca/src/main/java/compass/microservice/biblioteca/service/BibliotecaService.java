@@ -26,8 +26,9 @@ import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
 import compass.microservice.biblioteca.controller.dto.InfoLocLivroDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.RegistroDto;
-import compass.microservice.biblioteca.controller.dto.RequestPedirLivroDto;
 import compass.microservice.biblioteca.controller.dto.RequestTesteDTO;
+import compass.microservice.biblioteca.controller.dto.RetornoPedidoDto;
+import compass.microservice.biblioteca.controller.dto.erros.ErroBuscaLivroDto;
 import compass.microservice.biblioteca.controller.form.BuscarLivroProximoForm;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
@@ -107,9 +108,9 @@ public class BibliotecaService {
 		return ResponseEntity.ok(teste);
 	}
 
-	public ResponseEntity<RequestPedirLivroDto> pedirLivros(RequestPedirLivros form) {
+	public ResponseEntity<RetornoPedidoDto> pedirLivros(RequestPedirLivros form) {
 
-		RequestPedirLivroDto request = new RequestPedirLivroDto();
+		RetornoPedidoDto request = new RetornoPedidoDto();
 
 		Optional<Biblioteca> opBiblio = bRepo.findById(form.getIdBiblioteca());
 
@@ -197,6 +198,8 @@ public class BibliotecaService {
 
 	public List<InfoLocLivroDto> buscarLivroProximo(BuscarLivroProximoForm form) throws Exception {
 
+		Localizacao loc = new Localizacao();
+		ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
 		List<InfoLocLivroDto> livrosMaisProximos = new ArrayList<InfoLocLivroDto>();
 
 		for (String s: form.getNomeLivros()) {
@@ -205,24 +208,31 @@ public class BibliotecaService {
 
 			if (livros.size()>=2) {
 
-				Localizacao loc = new Localizacao();
-				ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
+				Optional<Livro> opLivroMaisProximo = Optional.ofNullable(loc.livroMaisProximo(usuarioEnd, livros,form.isMostrarIndisponiveis()));
 
-				Livro livroMaisProximo = loc.livroMaisProximo(usuarioEnd, livros);
+				if(opLivroMaisProximo.isPresent()) {
+					Livro livroMaisProximo = opLivroMaisProximo.get();
+					InfoLocLivroDto info = new InfoLocLivroDto(livroMaisProximo, livroMaisProximo.getBiblioteca());
+					livrosMaisProximos.add(info);
+				}
 
-				InfoLocLivroDto info = new InfoLocLivroDto(livroMaisProximo, livroMaisProximo.getBiblioteca());
-				livrosMaisProximos.add(info);
 
 			}else if (livros.isEmpty())  {
 
 				InfoLocLivroDto info = new InfoLocLivroDto(s);
 				livrosMaisProximos.add(info);
 
-			}else{
-
+			}else {
 				Livro livro = livros.get(0);
-				InfoLocLivroDto info = new InfoLocLivroDto(livro, livro.getBiblioteca());
-				livrosMaisProximos.add(info);
+				if(!form.isMostrarIndisponiveis()) {
+					if(livro.getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
+						InfoLocLivroDto info = new InfoLocLivroDto(livro, livro.getBiblioteca());
+						livrosMaisProximos.add(info);
+					}
+				}else {
+					InfoLocLivroDto info = new InfoLocLivroDto(livro, livro.getBiblioteca());
+					livrosMaisProximos.add(info);
+				}
 			}
 		}
 
@@ -232,5 +242,77 @@ public class BibliotecaService {
 
 	}
 
+	public HashMap<String, List<Object>> pedidoAvancado(BuscarLivroProximoForm form) throws Exception {
+
+		HashMap<Long, List<Livro>> livrosPedidos = new HashMap<>();
+		List<Object> erros = new ArrayList<>();
+		Localizacao loc = new Localizacao();
+		ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
+
+		for (String s: form.getNomeLivros()) {
+			List<Livro> livros = lRepo.findByNome(s);
+			Livro livroMaisProximo = null;
+
+			if (livros.size()>1) {
+				Optional<Livro> opLivroMaisProximo = Optional.ofNullable(loc.livroMaisProximo(usuarioEnd, livros, false));
+				if(opLivroMaisProximo.isPresent()) {
+					livroMaisProximo = opLivroMaisProximo.get();
+				}else {
+					ErroBuscaLivroDto erro = new ErroBuscaLivroDto(s, "Nenhuma unidade deste livro disponível.");
+					erros.add(erro);
+				}
+
+			}else if (livros.size() == 1)  {
+				Livro l = livros.get(0);
+				if (l.getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
+					livroMaisProximo = l;
+				}else {
+					ErroBuscaLivroDto erro = new ErroBuscaLivroDto(s, "Nenhuma unidade deste livro disponível.");
+					erros.add(erro);
+				}
+
+			}else {
+				ErroBuscaLivroDto erro = new ErroBuscaLivroDto(s, "Livro não encontrado.");
+				erros.add(erro);
+			}
+
+			if(!(livroMaisProximo == null)) {
+
+				Optional<List<Livro>> mapList = Optional.ofNullable(livrosPedidos.get(livroMaisProximo.getBiblioteca().getId()));
+				if(mapList.isPresent()) {
+					mapList.get().add(livroMaisProximo);
+					livrosPedidos.put(livroMaisProximo.getBiblioteca().getId(), mapList.get());
+				}else {
+					List<Livro> newMapList = new ArrayList<>();
+					newMapList.add(livroMaisProximo);
+					livrosPedidos.put(livroMaisProximo.getBiblioteca().getId(), newMapList);
+				}
+			}
+		}
+
+		List<Object> pedidosRealizados = new ArrayList<>();
+		if(!livrosPedidos.isEmpty()) {
+
+			for (Map.Entry<Long, List<Livro>> entry: livrosPedidos.entrySet()) {
+				RequestPedirLivros pedido = new  RequestPedirLivros ();
+				List<Long> idLivros = new ArrayList<>();
+
+				for (Livro l : entry.getValue()) {
+					idLivros.add(l.getId());		
+				}
+
+				pedido.setIdBiblioteca(entry.getKey());
+				pedido.setIdLivros(idLivros);
+				pedido.setIdUser(form.getUserId());
+
+
+				pedidosRealizados.add(pedirLivros(pedido).getBody());
+			}
+		}
+		HashMap<String, List<Object>> mapRetorno = new HashMap<String, List<Object>>();
+		mapRetorno.put("pedidos", pedidosRealizados);
+		mapRetorno.put("erros", erros);
+		return mapRetorno;
+	}
 
 }
