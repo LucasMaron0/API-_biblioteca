@@ -6,14 +6,14 @@ public class RetornoPedidoDto {
 
 
 	private String status;
-	
+
 	private String biblioteca;
 
-	private List<Long> livrosDisponiveis;
+	private List<String> livrosDisponiveis;
 
 	private List<Long> livriosIndisponiveis;
-	
-	
+
+
 	public RetornoPedidoDto() {
 		super();
 	}
@@ -35,11 +35,13 @@ public class RetornoPedidoDto {
 		this.biblioteca = biblioteca;
 	}
 
-	public List<Long> getLivrosDisponiveis() {
+
+
+	public List<String> getLivrosDisponiveis() {
 		return livrosDisponiveis;
 	}
 
-	public void setLivrosDisponiveis(List<Long> livrosDisponiveis) {
+	public void setLivrosDisponiveis(List<String> livrosDisponiveis) {
 		this.livrosDisponiveis = livrosDisponiveis;
 	}
 
@@ -50,12 +52,12 @@ public class RetornoPedidoDto {
 	public void setLivriosIndisponiveis(List<Long> livriosIndisponiveis) {
 		this.livriosIndisponiveis = livriosIndisponiveis;
 	}
-	
-	
-	
-	
 
-	
+
+
+
+
+
 
 
 

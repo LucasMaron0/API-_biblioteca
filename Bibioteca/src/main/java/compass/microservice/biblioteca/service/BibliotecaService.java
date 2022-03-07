@@ -2,6 +2,7 @@ package compass.microservice.biblioteca.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -132,7 +133,7 @@ public class BibliotecaService {
 			}
 
 			List<Long> livros = form.getIdLivros();
-			List<Long> livrosDisponiveis = new ArrayList<Long>();
+			List<String> livrosDisponiveis = new ArrayList<>();
 			List<Long> livrosIndisponiveis = new ArrayList<Long>();
 			List<Livro> livrosPedido = new ArrayList<Livro>();
 
@@ -142,7 +143,7 @@ public class BibliotecaService {
 
 				if (livro.isPresent() && livro.get().getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
 					livrosPedido.add(livro.get());
-					livrosDisponiveis.add(livro.get().getId());
+					livrosDisponiveis.add(livro.get().getNome());
 
 				} else {
 					livrosIndisponiveis.add(id);
@@ -249,10 +250,41 @@ public class BibliotecaService {
 		Localizacao loc = new Localizacao();
 		ReceberEnderecoUsuario usuarioEnd= new ReceberEnderecoUsuario(form);
 
+		List<Registro> registrosUsuario= rRepo.findAllByIdUsuario(form.getUserId());
+		List<Long> bibliosComPedidosEmAndamento = new ArrayList<>();
+
+		for(Registro r: registrosUsuario) {
+			if (r.getStatusRegistro().equals(StatusRegistro.EM_ANDAMENTO)) {
+				bibliosComPedidosEmAndamento.add(r.getBiblioteca().getId());
+			}
+		}
+
+		
+
 		for (String s: form.getNomeLivros()) {
 			List<Livro> livros = lRepo.findByNome(s);
 			Livro livroMaisProximo = null;
 
+			boolean emBbComPedidoEmAndamento = false;
+			
+			System.out.println(livros.size());
+			
+			if (!bibliosComPedidosEmAndamento.isEmpty()) {
+				if (!livros.isEmpty()) {
+					Iterator<Livro> i = livros.iterator();
+					while(i.hasNext()) {
+						Livro l = i.next();
+						if (bibliosComPedidosEmAndamento.contains(l.getBiblioteca().getId())) {
+							i.remove();
+							System.out.println("i =" + i);
+							emBbComPedidoEmAndamento = true;
+						}
+					}
+				}
+			}
+
+			System.out.println(livros.size());
+			
 			if (livros.size()>1) {
 				Optional<Livro> opLivroMaisProximo = Optional.ofNullable(loc.livroMaisProximo(usuarioEnd, livros, false));
 				if(opLivroMaisProximo.isPresent()) {
@@ -272,8 +304,13 @@ public class BibliotecaService {
 				}
 
 			}else {
-				ErroBuscaLivroDto erro = new ErroBuscaLivroDto(s, "Livro não encontrado.");
-				erros.add(erro);
+				if(!emBbComPedidoEmAndamento) {
+					ErroBuscaLivroDto erro = new ErroBuscaLivroDto(s, "Livro não encontrado.");
+					erros.add(erro);
+				}else {
+					ErroBuscaLivroDto erro = new ErroBuscaLivroDto(s, "Você já tem um pedido em andamento na Biblioteca que possui este livro");
+					erros.add(erro);
+				}
 			}
 
 			if(!(livroMaisProximo == null)) {

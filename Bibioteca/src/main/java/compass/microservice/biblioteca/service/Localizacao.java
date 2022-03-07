@@ -121,8 +121,6 @@ public class Localizacao {
 					livroMaisProximo = entry.getValue();
 				}
 			}
-
-
 		}
 		return livroMaisProximo;
 
