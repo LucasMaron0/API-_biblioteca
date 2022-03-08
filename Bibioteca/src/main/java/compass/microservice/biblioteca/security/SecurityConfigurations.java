@@ -50,13 +50,14 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().authorizeRequests()
+		http.authorizeRequests()
 		.antMatchers(HttpMethod.GET, "/biblioteca").permitAll()
 		.antMatchers(HttpMethod.GET, "/biblioteca/**").permitAll()
 		.antMatchers(HttpMethod.GET,"/livros").permitAll()
 		.antMatchers(HttpMethod.GET,"/livros/**").permitAll()
-		.antMatchers(HttpMethod.GET,"/service/**").permitAll()
-		.antMatchers(HttpMethod.POST,"/service/**").permitAll()
+		.antMatchers(HttpMethod.POST,"/service/listarLivros").permitAll()
+		.antMatchers(HttpMethod.POST,"/service/biblioteca-mais-proxima").permitAll()
+		.antMatchers(HttpMethod.POST,"/service/livro-mais-proximo").permitAll()
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
 		.anyRequest().authenticated()
 		.and().csrf().disable()

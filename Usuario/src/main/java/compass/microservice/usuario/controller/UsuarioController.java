@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -77,12 +78,12 @@ public class UsuarioController {
 
 	@PostMapping("/pedido")
 	@Transactional
-	public ResponseEntity<?> pedirlivro(@RequestBody @Valid PedirLivroForm form) {
+	public ResponseEntity<?> pedirlivro(@RequestHeader("Authorization") String token, @RequestBody @Valid PedirLivroForm form) {
 
 		Optional<Usuario> optional = uRepo.findById(form.getIdUser());
 
 		if (optional.isPresent()) {
-			RetornoPedidoDto retorno = uService.pedirLivros(form);
+			RetornoPedidoDto retorno = uService.pedirLivros(form, token);
 
 			return ResponseEntity.ok().body(retorno);
 		}
@@ -123,8 +124,8 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/registros/{idUsuario}")
-	public List<RegistroDto> listarRegistrosPorUsuario(@PathVariable Long idUsuario){
-		return uService.listarRegistrosPorUsuario(idUsuario);
+	public List<RegistroDto> listarRegistrosPorUsuario(@RequestHeader("Authorization") String token, @PathVariable Long idUsuario){
+		return uService.listarRegistrosPorUsuario(idUsuario, token);
 	}
 
 	@GetMapping("/buscarLivroProximo/{id}")
@@ -151,13 +152,16 @@ public class UsuarioController {
 
 	@PostMapping("/pedidoAvancado/{id}")
 	@Transactional
-	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ) throws ClassNotFoundException{
+	public ResponseEntity<?> pedidoAvancado (@RequestHeader("Authorization") String token,
+			@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ) throws ClassNotFoundException{
+		
 		Optional<Usuario> op = uRepo.findById(id);
 		if (op.isPresent()) {
+		
 			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
 					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
 
-			HashMap<String, List<Object>> retorno = uService.pedidoAvancado(form);
+			HashMap<String, List<Object>> retorno = uService.pedidoAvancado(form, token);
 
 			List<Object> pedidos = retorno.get("pedidos");
 			List<Object> erros =  retorno.get("erros");
@@ -190,10 +194,10 @@ public class UsuarioController {
 	
 	@DeleteMapping("/{id}")
 	@Transactional
-	public ResponseEntity<?> remover(@PathVariable Long id) {
+	public ResponseEntity<?> remover(@RequestHeader("Authorization") String token, @PathVariable Long id) {
 		Optional<Usuario> optional = uRepo.findById(id);
 		if (optional.isPresent()) {
-			List<RegistroDto> registros  = listarRegistrosPorUsuario(optional.get().getId());
+			List<RegistroDto> registros  = listarRegistrosPorUsuario(token, optional.get().getId());
 			Boolean deletavel = true;
 
 			for (RegistroDto r : registros) {

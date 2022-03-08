@@ -45,9 +45,9 @@ public class UsuarioService {
 		return retorno;
 	}
 
-	public RetornoPedidoDto pedirLivros(@Valid PedirLivroForm form) {
+	public RetornoPedidoDto pedirLivros(@Valid PedirLivroForm form, String token) {
 
-		RetornoPedidoDto retorno = bClient.pedirLivros(form);
+		RetornoPedidoDto retorno = bClient.pedirLivros(form, token);
 
 		return retorno;
 	}
@@ -67,9 +67,9 @@ public class UsuarioService {
 
 
 
-	public List<RegistroDto> listarRegistrosPorUsuario(Long idUsuario){
+	public List<RegistroDto> listarRegistrosPorUsuario(Long idUsuario, String token){
 
-		List<RegistroDto> listarRegistrosPorUsuario = bClient.listarRegistrosPorUsuario(idUsuario);
+		List<RegistroDto> listarRegistrosPorUsuario = bClient.listarRegistrosPorUsuario(idUsuario, token);
 
 		return listarRegistrosPorUsuario;
 	}
@@ -78,19 +78,15 @@ public class UsuarioService {
 		return bClient.buscarLivroProximo(form);
 	}
 
-	public HashMap<String, List<Object>> pedidoAvancado(BuscarLivroProximoForm form) {
-		return bClient.pedidoAvancado(form);
+	public HashMap<String, List<Object>> pedidoAvancado(BuscarLivroProximoForm form, String token) {
+		return bClient.pedidoAvancado(form, token);
 	}
 	//Recebe
 
 	public boolean encerrarRegistro(EncerrarPedidoDto encPedido) {
-
 		Optional<Usuario> optUsuario = uRepo.findById(encPedido.getIdUser());
 		if (optUsuario.isPresent()) {
-
 			return true;
-
-
 		}else {
 			return false;
 		}
