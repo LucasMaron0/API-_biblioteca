@@ -152,7 +152,6 @@ public class UsuarioController {
 	@PostMapping("/pedidoAvancado/{id}")
 	@Transactional
 	public ResponseEntity<?> pedidoAvancado (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ) throws ClassNotFoundException{
-
 		Optional<Usuario> op = uRepo.findById(id);
 		if (op.isPresent()) {
 			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),

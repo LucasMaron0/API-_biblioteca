@@ -1,4 +1,4 @@
-package compass.microservice.biblioteca.config.security;
+package compass.microservice.biblioteca.security;
 
 import java.io.IOException;
 
@@ -29,16 +29,16 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		
 		String token = recuperarToken(request);
+		System.out.println(token);
 		boolean valido = tokenService.isTokenValido(token);
 		if(valido) {
 			autenticarUsuario(token);
 		}
-		
 		filterChain.doFilter(request, response);
 		
 	}
 
-	private void autenticarUsuario(String token) {
+	private void autenticarUsuario(String token) {	
 			Long idUsuario = tokenService.getIdUsuario(token);
 			Usuario usuario = repository.findById(idUsuario).get();
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
@@ -47,9 +47,11 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
 	private String recuperarToken(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
-		if (token == null || token.isEmpty() || token.startsWith("Bearer")) {
+		System.out.println(token);
+		if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
 			return null;
 		}
+	
 		return token.substring(7, token.length());
 	}
 	

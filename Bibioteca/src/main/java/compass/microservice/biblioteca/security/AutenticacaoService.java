@@ -1,4 +1,4 @@
-package compass.microservice.biblioteca.config.security;
+package compass.microservice.biblioteca.security;
 
 import java.util.Optional;
 
