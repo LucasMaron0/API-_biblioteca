@@ -2,7 +2,6 @@ package compass.microservice.biblioteca.modelos;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
 import java.util.List;
 
 import javax.persistence.CascadeType;
