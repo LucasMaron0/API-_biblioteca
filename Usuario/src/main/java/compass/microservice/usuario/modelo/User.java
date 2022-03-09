@@ -24,6 +24,7 @@ public class User implements UserDetails {
 	private String email;
 	private String senha;
 	
+	
 	public Long getId() {
 		return id;
 	}
@@ -86,5 +87,7 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
+
 	
 }

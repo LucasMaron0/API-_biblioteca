@@ -8,18 +8,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import compass.microservice.biblioteca.modelos.Usuario;
-import compass.microservice.biblioteca.repository.UsuarioRepository;
+import compass.microservice.biblioteca.modelos.User;
+import compass.microservice.biblioteca.repository.UserRepository;
 
 @Service
 public class AutenticacaoService implements UserDetailsService {
 	
 	@Autowired
-	private UsuarioRepository repository;
+	private UserRepository repository;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<Usuario> usuario = repository.findByEmail(username);
+		Optional<User> usuario = repository.findByEmail(username);
 		if(usuario.isPresent()) {
 			return usuario.get();
 		}

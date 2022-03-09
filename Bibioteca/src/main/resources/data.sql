@@ -46,4 +46,11 @@ INSERT INTO LIVRO(biblioteca_id, nome, categoria, autor, editora, lancamento, st
 INSERT INTO REGISTRO(data_locacao, data_vencimento, status_registro, biblioteca_id, id_usuario, multa_gerada) VALUES('2022-02-14', '2022-02-18', 'FINALIZADO', 1, 1,0);
 INSERT INTO REGISTRO(data_locacao, data_vencimento, status_registro, biblioteca_id, id_usuario, multa_gerada) VALUES('2022-02-14', '2022-02-26', 'EM_ANDAMENTO', 1, 2,0);
 
-INSERT INTO USUARIO(email, senha) VALUES('bibliotecario@email.com', '$2a$10$rkyvHPKL37hItZEsK2lttu8qSG3BQNCu6T4dUXhVkn8zGZcYCCm9i');
+INSERT INTO PERFIL (nome) VALUES ('ROLE_USUARIO');
+INSERT INTO USER(email, senha) VALUES('user@email.com', '$2a$10$fCgVs3Asfej.65RIsBmQ6.9eFUIKqBAOz/rkjAZleVgzp2bIViIum');
+INSERT INTO USER_PERFIS (user_id, perfis_id) VALUES (1,1);
+
+INSERT INTO PERFIL (nome) VALUES ('ROLE_BIBLIOTECA');
+INSERT INTO USER(email, senha) VALUES('biblioteca@email.com', '$2a$10$fCgVs3Asfej.65RIsBmQ6.9eFUIKqBAOz/rkjAZleVgzp2bIViIum');
+INSERT INTO USER_PERFIS (user_id, perfis_id) VALUES (2,2);
+

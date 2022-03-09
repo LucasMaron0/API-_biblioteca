@@ -7,6 +7,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Optional;
 
+import javax.annotation.security.RolesAllowed;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -19,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -118,8 +122,9 @@ public class BibliotecaController {
 
 		return ResponseEntity.notFound().build();
 	}
-
+	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_BIBLIOTECA')")
 	@Transactional
 	public ResponseEntity<?> remover(@PathVariable Long id) {
 		Optional<Biblioteca> optional = bRepo.findById(id);

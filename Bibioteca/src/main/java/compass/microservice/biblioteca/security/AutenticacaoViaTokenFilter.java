@@ -11,15 +11,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import compass.microservice.biblioteca.modelos.Usuario;
-import compass.microservice.biblioteca.repository.UsuarioRepository;
+import compass.microservice.biblioteca.modelos.User;
+import compass.microservice.biblioteca.repository.UserRepository;
 
 public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
 	private TokenService tokenService;
-	private UsuarioRepository repository;
+	private UserRepository repository;
 	
-	public AutenticacaoViaTokenFilter(TokenService tokenService, UsuarioRepository repository) {
+	public AutenticacaoViaTokenFilter(TokenService tokenService, UserRepository repository) {
 		this.tokenService = tokenService;
 		this.repository = repository;
 	}
@@ -40,7 +40,7 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
 	private void autenticarUsuario(String token) {	
 			Long idUsuario = tokenService.getIdUsuario(token);
-			Usuario usuario = repository.findById(idUsuario).get();
+			User usuario = repository.findById(idUsuario).get();
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 	}

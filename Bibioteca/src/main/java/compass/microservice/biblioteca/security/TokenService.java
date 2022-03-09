@@ -1,12 +1,17 @@
 package compass.microservice.biblioteca.security;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import compass.microservice.biblioteca.modelos.Usuario;
+import compass.microservice.biblioteca.modelos.Perfil;
+import compass.microservice.biblioteca.modelos.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,15 +25,25 @@ public class TokenService {
 	private String secret = "dsabebiwbjeibewqbiebq";
 
 	public String gerarToken(Authentication authentication) {
-		Usuario logado = (Usuario) authentication.getPrincipal();
+		User logado = (User) authentication.getPrincipal();
 		Date hoje = new Date();
 		Date dataExpiracao = new Date(hoje.getTime() + Long.parseLong(expiration));
+
+		Collection<? extends GrantedAuthority> authorities = logado.getAuthorities();
+
+		List<String> roles = new ArrayList<String>();
+		
+		for(GrantedAuthority authority : authorities) {
+			roles.add(authority.getAuthority());
+			
+		}
 
 		return Jwts.builder()
 				.setIssuer("API Biblioteca")
 				.setSubject(logado.getId().toString())
 				.setIssuedAt(hoje)
 				.setExpiration(dataExpiracao)
+				.claim("Roles", roles)
 				.signWith(SignatureAlgorithm.HS256, secret)
 				.compact();
 	}
