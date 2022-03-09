@@ -4,8 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +24,7 @@ import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
 import compass.microservice.biblioteca.controller.form.RequestTesteForm;
 import compass.microservice.biblioteca.service.BibliotecaService;
+import feign.Headers;
 
 @RestController
 @RequestMapping("/service")
@@ -36,7 +40,7 @@ public class BibliotecaServiceController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/pedido")
-	public ResponseEntity<RetornoPedidoDto> pedirLivros(@RequestBody RequestPedirLivros form) {
+	public ResponseEntity<RetornoPedidoDto> pedirLivros(@RequestBody RequestPedirLivros form, @RequestHeader("Authorization") String token) {
 		return bService.pedirLivros(form);
 	}
 
@@ -51,7 +55,7 @@ public class BibliotecaServiceController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/listarRegistrosPorUsuario")
-	public List<RegistroDto> listarRegistrosPorUsuario(@RequestBody Long idUsuario) {
+	public List<RegistroDto> listarRegistrosPorUsuario(@RequestBody Long idUsuario, @RequestHeader("Authorization") String token) {
 		return bService.getByIdUsuario(idUsuario);
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/livro-mais-proximo")
@@ -59,8 +63,10 @@ public class BibliotecaServiceController {
 		return bService.buscarLivroProximo(form);
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/pedido-avancado")
-	public HashMap<String, List<Object>> pedidoAvancado(@RequestBody BuscarLivroProximoForm form) throws Exception {
+	public HashMap<String, List<Object>> pedidoAvancado(
+			@RequestBody BuscarLivroProximoForm form, 
+			@RequestHeader("Authorization") String token) throws Exception {
 		return bService.pedidoAvancado(form);
 	}
-
+	
 }
