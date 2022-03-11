@@ -12,10 +12,7 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import compass.microservice.biblioteca.controller.form.BuscarLivroProximoForm;
 import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Endereco;

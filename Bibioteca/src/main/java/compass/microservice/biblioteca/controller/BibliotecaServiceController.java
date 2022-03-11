@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +22,6 @@ import compass.microservice.biblioteca.controller.form.ReceberEnderecoUsuario;
 import compass.microservice.biblioteca.controller.form.RequestPedirLivros;
 import compass.microservice.biblioteca.controller.form.RequestTesteForm;
 import compass.microservice.biblioteca.service.BibliotecaService;
-import feign.Headers;
 
 @RestController
 @RequestMapping("/service")

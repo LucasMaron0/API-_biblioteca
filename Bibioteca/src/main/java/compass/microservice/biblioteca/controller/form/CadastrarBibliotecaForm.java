@@ -1,10 +1,5 @@
 package compass.microservice.biblioteca.controller.form;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
-
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Endereco;
 import compass.microservice.biblioteca.modelos.Estado;

@@ -1,7 +1,6 @@
 package compass.microservice.biblioteca.controller;
 
 import java.net.URI;
-
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -25,11 +24,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import compass.microservice.biblioteca.controller.dto.BibliotecaDto;
 import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.dto.erros.ErroCadastrarLivro;
 import compass.microservice.biblioteca.controller.form.AtualizarLivroForm;
-import compass.microservice.biblioteca.controller.form.CadastrarBibliotecaForm;
 import compass.microservice.biblioteca.controller.form.CadastrarLivroForm;
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Livro;

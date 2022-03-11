@@ -2,9 +2,6 @@ package compass.microservice.biblioteca.controller.form;
 
 import java.time.LocalDate;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Categoria;
 import compass.microservice.biblioteca.modelos.Livro;
