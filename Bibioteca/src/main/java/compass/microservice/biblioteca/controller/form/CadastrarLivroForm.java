@@ -2,8 +2,13 @@ package compass.microservice.biblioteca.controller.form;
 
 import java.time.LocalDate;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Categoria;
@@ -11,33 +16,30 @@ import compass.microservice.biblioteca.modelos.Livro;
 
 public class CadastrarLivroForm {
 
-	
-
+	@NotNull(message = "Escolher uma Biblioteca já cadastrada")
 	private Long idBiblioteca;
-	
-	
-	private String nome;
-	
-	private String autor;
-	
-		
-	private Categoria categoria;
-	
-	
-	private String editora;
-	
-	private LocalDate lançamento;
-	
-	
-	
-	
-	public Livro converter (Biblioteca biblioteca) {
-        return new Livro (nome, autor, categoria, editora, lançamento, biblioteca);
-    }
-	
-		
 
-	
+	@NotBlank(message = "Inserir o nome do Livro")
+	private String nome;
+
+	@NotBlank(message = "Inserir o nome do Autor")
+	@Pattern(regexp = "^[A-Za-z ]*$", message = "Digite um nome válido (apenas letras)")
+	private String autor;
+
+	@NotNull(message = "Escolher uma Categoria dentre as listadas")
+	private Categoria categoria;
+
+	@NotBlank(message = "Inserir o nome da Editora")
+	private String editora;
+
+	@JsonDeserialize(using = LocalDateDeserializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	@NotNull(message = "Digite uma data")
+	private LocalDate lançamento;
+
+	public Livro converter(Biblioteca biblioteca) {
+		return new Livro(nome, autor, categoria, editora, lançamento, biblioteca);
+	}
 
 	public Long getIdBiblioteca() {
 		return idBiblioteca;
@@ -46,7 +48,6 @@ public class CadastrarLivroForm {
 	public void setIdBiblioteca(Long idBiblioteca) {
 		this.idBiblioteca = idBiblioteca;
 	}
-
 
 	public String getNome() {
 		return nome;
@@ -87,10 +88,5 @@ public class CadastrarLivroForm {
 	public void setLançamento(LocalDate lançamento) {
 		this.lançamento = lançamento;
 	}
-	
-	
-	
-	
-	
-	
+
 }

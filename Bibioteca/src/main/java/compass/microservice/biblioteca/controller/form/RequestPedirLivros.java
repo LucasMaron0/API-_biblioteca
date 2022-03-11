@@ -3,20 +3,15 @@ package compass.microservice.biblioteca.controller.form;
 import java.util.List;
 
 public class RequestPedirLivros {
-	
-	
-	
+
 	private Long idUser;
 	private Long idBiblioteca;
 	private List<Long> idLivros;
-	
-	
+
 	public RequestPedirLivros() {
-		
+
 	}
 
-	
-	
 	public Long getIdUser() {
 		return idUser;
 	}
@@ -40,7 +35,5 @@ public class RequestPedirLivros {
 	public void setIdLivros(List<Long> idLivros) {
 		this.idLivros = idLivros;
 	}
-	
-	
 
 }

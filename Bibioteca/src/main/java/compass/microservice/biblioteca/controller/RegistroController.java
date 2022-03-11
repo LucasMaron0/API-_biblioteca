@@ -3,7 +3,6 @@ package compass.microservice.biblioteca.controller;
 import java.util.List;
 import java.util.Objects;
 
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,7 @@ public class RegistroController {
 	}
 
 	@GetMapping("/checkarMultas")
-	public List<Registro> checkarMultas(){
+	public List<Registro> checkarMultas() {
 
 		List<Registro> checkarMultas = rRepo.findByStatusRegistro(StatusRegistro.EM_ANDAMENTO);
 		for (Registro registro : checkarMultas) {

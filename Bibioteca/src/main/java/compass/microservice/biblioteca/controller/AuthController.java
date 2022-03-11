@@ -22,29 +22,24 @@ import compass.microservice.biblioteca.security.TokenService;
 public class AuthController {
 
 	@Autowired
-	private AuthenticationManager  authMng; 
-	
+	private AuthenticationManager authMng;
+
 	@Autowired
 	private TokenService tokenService;
-	
 
 	@PostMapping
-	public 	ResponseEntity<TokenDto> autenticar (@RequestBody @Valid LoginForm form){
+	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken dados = form.converter();
-		
+
 		try {
-			Authentication authenticate = authMng.authenticate(dados); 
+			Authentication authenticate = authMng.authenticate(dados);
 			String token = tokenService.gerarToken(authenticate);
-			
-			
-			return  ResponseEntity.ok(new TokenDto(token, "Bearer"));
-			
+
+			return ResponseEntity.ok(new TokenDto(token, "Bearer"));
+
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();
 		}
 
-
-
 	}
-}	
-
+}

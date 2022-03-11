@@ -1,11 +1,9 @@
 package compass.microservice.biblioteca.controller.form;
 
 public class RequestTesteForm {
-	
+
 	private String nome;
 	private String mensagem;
-	
-	
 
 	public RequestTesteForm(String nome, String mensagem) {
 		super();

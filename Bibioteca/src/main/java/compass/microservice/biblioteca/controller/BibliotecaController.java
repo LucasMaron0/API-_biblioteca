@@ -80,7 +80,7 @@ public class BibliotecaController {
 
 	}
 
-	@GetMapping("/biblioteca/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<BibliotecaDto> listById(@PathVariable long id) {
 		Optional<Biblioteca> biblioteca = bRepo.findById(id);
 		if (biblioteca.isPresent()) {
