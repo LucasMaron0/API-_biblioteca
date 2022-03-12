@@ -2,23 +2,23 @@ package compass.microservice.usuario.controller.form;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 public class PedirLivroForm {
-	
-	
+
+	@NotNull(message = "Escolher um Usuário válido")
 	private Long idUser;
-	
-	
+
+	@NotNull(message = "Escolher uma Biblioteca válida")
 	private Long idBiblioteca;
-	
+
+	@Size(min = 1, message = "Escolha pelo menos 1 Livro")
 	private List<Long> idLivros;
-	
+
 	public PedirLivroForm() {
-		
+
 	}
-	
 
 	public Long getIdUser() {
 		return idUser;
@@ -43,11 +43,5 @@ public class PedirLivroForm {
 	public void setIdLivros(List<Long> idLivros) {
 		this.idLivros = idLivros;
 	}
-	
-	
-	
-	
-	
-	
-	
+
 }

@@ -2,55 +2,42 @@ package compass.microservice.usuario.controller.form;
 
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
-
 import compass.microservice.usuario.modelo.Endereco;
 
 public class BuscarLivroProximoForm {
-	
-	
+
 	private Long userId;
-	
+
 	private List<String> nomeLivros;
-	
-	
+
 	private String estado;
-	
 
 	private String cidade;
-	
-	
+
 	private String bairro;
-	
-	
+
 	private String rua;
-	
-	
+
 	private int numero;
-	
+
 	private boolean mostrarIndisponiveis;
-	
+
 	public BuscarLivroProximoForm() {
-		
+
 	}
-	
+
 	public BuscarLivroProximoForm(long id, Endereco endereco, List<String> nomeLivros, boolean mostrarIndisponiveis) {
 
 		this.userId = id;
 		this.nomeLivros = nomeLivros;
-		this.estado= endereco.getEstado().toString();
-		this.cidade=endereco.getCidade();
-		this.bairro=endereco.getBairro();
-		this.rua= endereco.getRua();
+		this.estado = endereco.getEstado().toString();
+		this.cidade = endereco.getCidade();
+		this.bairro = endereco.getBairro();
+		this.rua = endereco.getRua();
 		this.numero = endereco.getNumero();
 		this.mostrarIndisponiveis = mostrarIndisponiveis;
 
-
 	}
-
 
 	public Long getUserId() {
 		return userId;
@@ -59,7 +46,6 @@ public class BuscarLivroProximoForm {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
 
 	public String getEstado() {
 		return estado;
@@ -101,11 +87,9 @@ public class BuscarLivroProximoForm {
 		this.numero = numero;
 	}
 
-
 	public List<String> getNomeLivros() {
 		return nomeLivros;
 	}
-
 
 	public void setNomeLivros(List<String> nomeLivros) {
 		this.nomeLivros = nomeLivros;
@@ -118,10 +102,5 @@ public class BuscarLivroProximoForm {
 	public void setMostrarIndisponiveis(boolean mostrarIndisponiveis) {
 		this.mostrarIndisponiveis = mostrarIndisponiveis;
 	}
-
-	
-	
-	
-
 
 }
