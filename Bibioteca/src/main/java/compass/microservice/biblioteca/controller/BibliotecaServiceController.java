@@ -26,7 +26,6 @@ import compass.microservice.biblioteca.service.BibliotecaService;
 @RestController
 @RequestMapping("/service")
 public class BibliotecaServiceController {
-	// responde requisiçoes de serviço do usuario
 
 	@Autowired
 	private BibliotecaService bService;
@@ -37,7 +36,8 @@ public class BibliotecaServiceController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/pedido")
-	public ResponseEntity<RetornoPedidoDto> pedirLivros(@RequestBody RequestPedirLivros form, @RequestHeader("Authorization") String token) {
+	public ResponseEntity<RetornoPedidoDto> pedirLivros(@RequestBody RequestPedirLivros form,
+			@RequestHeader("Authorization") String token) {
 		return bService.pedirLivros(form);
 	}
 
@@ -46,24 +46,26 @@ public class BibliotecaServiceController {
 		return bService.listarLivros(id);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/biblioteca-mais-proxima")	
-	public BibliotecaDto listarLivros(@RequestBody ReceberEnderecoUsuario form) throws Exception {				
+	@RequestMapping(method = RequestMethod.POST, value = "/biblioteca-mais-proxima")
+	public BibliotecaDto listarLivros(@RequestBody ReceberEnderecoUsuario form) throws Exception {
 		return bService.buscarBiblioProxima(form);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/listarRegistrosPorUsuario")
-	public List<RegistroDto> listarRegistrosPorUsuario(@RequestBody Long idUsuario, @RequestHeader("Authorization") String token) {
+	public List<RegistroDto> listarRegistrosPorUsuario(@RequestBody Long idUsuario,
+			@RequestHeader("Authorization") String token) {
 		return bService.getByIdUsuario(idUsuario);
 	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/livro-mais-proximo")
 	public List<InfoLocLivroDto> livroMaisProximo(@RequestBody BuscarLivroProximoForm form) throws Exception {
 		return bService.buscarLivroProximo(form);
 	}
+
 	@RequestMapping(method = RequestMethod.POST, value = "/pedido-avancado")
-	public HashMap<String, List<Object>> pedidoAvancado(
-			@RequestBody BuscarLivroProximoForm form, 
+	public HashMap<String, List<Object>> pedidoAvancado(@RequestBody BuscarLivroProximoForm form,
 			@RequestHeader("Authorization") String token) throws Exception {
 		return bService.pedidoAvancado(form);
 	}
-	
+
 }

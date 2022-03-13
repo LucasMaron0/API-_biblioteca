@@ -4,10 +4,7 @@ import java.util.List;
 
 import compass.microservice.biblioteca.modelos.Endereco;
 
-
-
 public class BuscarLivroProximoForm {
-
 
 	private Long userId;
 	private List<String> nomeLivros;
@@ -20,28 +17,23 @@ public class BuscarLivroProximoForm {
 
 	private boolean mostrarIndisponiveis;
 
-
 	public BuscarLivroProximoForm() {
 
 	}
-
-
 
 	public BuscarLivroProximoForm(long id, Endereco endereco, List<String> nomeLivros, boolean mostrarIndisponiveis) {
 
 		this.userId = id;
 		this.nomeLivros = nomeLivros;
-		this.estado= endereco.getEstado().toString();
-		this.cidade=endereco.getCidade();
-		this.bairro=endereco.getBairro();
-		this.rua= endereco.getRua();
+		this.estado = endereco.getEstado().toString();
+		this.cidade = endereco.getCidade();
+		this.bairro = endereco.getBairro();
+		this.rua = endereco.getRua();
 		this.numero = endereco.getNumero();
 
 		this.mostrarIndisponiveis = mostrarIndisponiveis;
 
-
 	}
-
 
 	public Long getUserId() {
 		return userId;
@@ -50,7 +42,6 @@ public class BuscarLivroProximoForm {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
 
 	public String getEstado() {
 		return estado;
@@ -92,23 +83,17 @@ public class BuscarLivroProximoForm {
 		this.numero = numero;
 	}
 
-
 	public List<String> getNomeLivros() {
 		return nomeLivros;
 	}
-
 
 	public void setNomeLivros(List<String> nomeLivros) {
 		this.nomeLivros = nomeLivros;
 	}
 
-
-
 	public boolean isMostrarIndisponiveis() {
 		return mostrarIndisponiveis;
 	}
-
-
 
 	public void setMostrarIndisponiveis(boolean mostrarIndisponiveis) {
 		this.mostrarIndisponiveis = mostrarIndisponiveis;

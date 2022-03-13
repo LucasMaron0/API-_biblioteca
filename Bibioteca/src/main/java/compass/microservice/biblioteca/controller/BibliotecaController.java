@@ -67,7 +67,7 @@ public class BibliotecaController {
 
 	}
 
-	@GetMapping("/biblioteca/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<BibliotecaDto> listById(@PathVariable long id) {
 		Optional<Biblioteca> biblioteca = bRepo.findById(id);
 		if (biblioteca.isPresent()) {
@@ -76,7 +76,7 @@ public class BibliotecaController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping("/nomeAutor/{autor}")
 	public ResponseEntity<LivroDto> buscarPorAutor(@PathVariable String autor) {
 		Optional<Livro> optional = lRepo.findByAutorContainingIgnoreCase(autor);
@@ -95,7 +95,6 @@ public class BibliotecaController {
 		return ResponseEntity.notFound().build();
 	}
 
-
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<BibliotecaDto> atualizar(@PathVariable Long id,
@@ -109,7 +108,7 @@ public class BibliotecaController {
 
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasRole('ROLE_BIBLIOTECA')")
 	@Transactional

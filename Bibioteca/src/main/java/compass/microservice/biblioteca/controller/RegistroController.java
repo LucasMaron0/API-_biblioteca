@@ -56,7 +56,7 @@ public class RegistroController {
 	}
 
 	@GetMapping("/checkarMultas")
-	public List<Registro> checkarMultas(){
+	public List<Registro> checkarMultas() {
 
 		List<Registro> checkarMultas = rRepo.findByStatusRegistro(StatusRegistro.EM_ANDAMENTO);
 		for (Registro registro : checkarMultas) {

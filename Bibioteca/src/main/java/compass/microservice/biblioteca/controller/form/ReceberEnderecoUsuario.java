@@ -1,23 +1,17 @@
 package compass.microservice.biblioteca.controller.form;
 
 public class ReceberEnderecoUsuario {
-	
-	
+
 	private Long userId;
-	
-	
+
 	private String estado;
-	
-	
+
 	private String cidade;
-	
-	
+
 	private String bairro;
-	
-	
+
 	private String rua;
-	
-	
+
 	private int numero;
 
 	public ReceberEnderecoUsuario() {
@@ -31,7 +25,6 @@ public class ReceberEnderecoUsuario {
 		this.rua = form.getRua();
 		this.numero = form.getNumero();
 	}
-
 
 	public Long getUserId() {
 		return userId;
