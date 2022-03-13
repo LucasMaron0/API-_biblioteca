@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import compass.microservice.usuario.controller.dto.EndBibliotecaDto;
-import compass.microservice.usuario.controller.dto.ErroBuscaLivroDto;
 import compass.microservice.usuario.controller.dto.InfoLocLivroDto;
 import compass.microservice.usuario.controller.dto.LivroDto;
 import compass.microservice.usuario.controller.dto.RegistroDto;
@@ -72,14 +70,15 @@ public class UsuarioController {
 		Usuario usuario = form.converter();
 		uRepo.save(usuario);
 
-		URI uri = uriBuilder.path("/usuario/{id}").buildAndExpand(usuario.getId()).toUri();
+		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
 		return ResponseEntity.created(uri).body(new UsuarioDto(usuario));
 
 	}
 
 	@PostMapping("/pedido")
 	@Transactional
-	public ResponseEntity<?> pedirlivro(@RequestHeader("Authorization") String token, @RequestBody @Valid PedirLivroForm form) {
+	public ResponseEntity<?> pedirlivro(@RequestHeader("Authorization") String token,
+			@RequestBody @Valid PedirLivroForm form) {
 
 		Optional<Usuario> optional = uRepo.findById(form.getIdUser());
 
@@ -92,9 +91,6 @@ public class UsuarioController {
 		return ResponseEntity.badRequest().body("Usuario não existe");
 	}
 
-
-	
-
 	@GetMapping
 	public Page<UsuarioDto> listAllUsuarios(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable paginacao) {
@@ -104,18 +100,17 @@ public class UsuarioController {
 
 	}
 
-
 	@GetMapping("/livros/{id}")
-	public List<LivroDto> livrosBiblioteca(	@PathVariable Long id){
+	public List<LivroDto> livrosBiblioteca(@PathVariable Long id) {
 		return uService.listarLivros(id);
 	}
 
 	@GetMapping("/buscarBiblioteca/{userId}")
-	public ResponseEntity<?> buscarBiblioMaisProxima (@PathVariable long userId) {
+	public ResponseEntity<?> buscarBiblioMaisProxima(@PathVariable long userId) {
 		Optional<Usuario> optional = uRepo.findById(userId);
 		if (optional.isPresent()) {
 
-			MandarEnderecoUsuario end = new MandarEnderecoUsuario(userId, optional.get().getEndereco()); 
+			MandarEnderecoUsuario end = new MandarEnderecoUsuario(userId, optional.get().getEndereco());
 			EndBibliotecaDto retorno = uService.buscarBibliMaisProxima(end);
 
 			return ResponseEntity.ok(retorno);
@@ -125,25 +120,24 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/registros/{idUsuario}")
-	public List<RegistroDto> listarRegistrosPorUsuario(@RequestHeader("Authorization") String token, @PathVariable Long idUsuario){
+	public List<RegistroDto> listarRegistrosPorUsuario(@RequestHeader("Authorization") String token,
+			@PathVariable Long idUsuario) {
 		return uService.listarRegistrosPorUsuario(idUsuario, token);
 	}
 
 	@GetMapping("/buscarLivroProximo/{id}")
 
-	public ResponseEntity<?> buscarLivroProximo (@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ){
+	public ResponseEntity<?> buscarLivroProximo(@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros) {
 
 		Optional<Usuario> op = uRepo.findById(id);
 		if (op.isPresent()) {
-			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
-					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
-
-
+			BuscarLivroProximoForm form = new BuscarLivroProximoForm(op.get().getId(), op.get().getEndereco(),
+					nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
 
 			List<InfoLocLivroDto> livros = uService.buscarLivroProximo(form);
-			if(livros.isEmpty()) {
+			if (livros.isEmpty()) {
 				return ResponseEntity.badRequest().body("Nenhum livro foi encontrado");
-			}else {
+			} else {
 				return ResponseEntity.ok().body(livros);
 			}
 
@@ -153,20 +147,19 @@ public class UsuarioController {
 
 	@PostMapping("/pedidoAvancado/{id}")
 	@Transactional
-	public ResponseEntity<?> pedidoAvancado (@RequestHeader("Authorization") String token,
-			@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros ) throws ClassNotFoundException{
-		
+	public ResponseEntity<?> pedidoAvancado(@RequestHeader("Authorization") String token, @PathVariable long id,
+			@RequestBody BuscarNomeLivrosForm nomeLivros) throws ClassNotFoundException {
+
 		Optional<Usuario> op = uRepo.findById(id);
 		if (op.isPresent()) {
-		
-			BuscarLivroProximoForm  form = new BuscarLivroProximoForm(op.get().getId(),
-					op.get().getEndereco(), nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
+
+			BuscarLivroProximoForm form = new BuscarLivroProximoForm(op.get().getId(), op.get().getEndereco(),
+					nomeLivros.getNomeLivros(), nomeLivros.isMostrarIndisponiveis());
 
 			HashMap<String, List<Object>> retorno = uService.pedidoAvancado(form, token);
 
 			List<Object> pedidos = retorno.get("pedidos");
-			List<Object> erros =  retorno.get("erros");
-
+			List<Object> erros = retorno.get("erros");
 
 			List<Object> respostas = new ArrayList<>();
 			respostas.addAll(pedidos);
@@ -174,11 +167,9 @@ public class UsuarioController {
 
 			return ResponseEntity.ok().body(respostas);
 
-
 		}
 		return ResponseEntity.badRequest().body("Usuario não existe");
 	}
-
 
 	@PutMapping("/{id}")
 	@Transactional
@@ -192,14 +183,13 @@ public class UsuarioController {
 
 		return ResponseEntity.notFound().build();
 	}
-	
-	
+
 	@DeleteMapping("/{id}")
 	@Transactional
 	public ResponseEntity<?> remover(@RequestHeader("Authorization") String token, @PathVariable Long id) {
 		Optional<Usuario> optional = uRepo.findById(id);
 		if (optional.isPresent()) {
-			List<RegistroDto> registros  = listarRegistrosPorUsuario(token, optional.get().getId());
+			List<RegistroDto> registros = listarRegistrosPorUsuario(token, optional.get().getId());
 			Boolean deletavel = true;
 
 			for (RegistroDto r : registros) {
@@ -217,9 +207,4 @@ public class UsuarioController {
 		return ResponseEntity.notFound().build();
 	}
 
-
-
-
 }
-
-

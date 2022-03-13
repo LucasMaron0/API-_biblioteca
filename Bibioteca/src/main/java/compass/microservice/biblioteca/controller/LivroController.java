@@ -91,7 +91,7 @@ public class LivroController {
 			biblioteca.getLivros().add(livro);
 			lRepo.save(livro);
 
-			URI uri = uriBuilder.path("/liv/{id}").buildAndExpand(livro.getId()).toUri();
+			URI uri = uriBuilder.path("/livros/{id}").buildAndExpand(livro.getId()).toUri();
 			return ResponseEntity.created(uri).body(new LivroDto(livro));
 
 		}else {

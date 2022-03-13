@@ -1,10 +1,17 @@
 package compass.microservice.usuario.controller.form;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class LoginForm {
 
+	@NotBlank(message = "Inserir o email")
 	private String email;
+	
+	@NotBlank(message = "Inserir a senha")
+	@Size(min = 1, message = "A senha deve ter no mínimo 1 caractere")
 	private String senha;
 
 	public String getEmail() {
