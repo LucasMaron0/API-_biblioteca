@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import compass.microservice.biblioteca.modelos.Perfil;
 import compass.microservice.biblioteca.modelos.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
