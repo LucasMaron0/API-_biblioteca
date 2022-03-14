@@ -8,10 +8,9 @@ import compass.microservice.biblioteca.controller.dto.EncerrarPedidoDto;
 
 @FeignClient("usuario")//nome do serviço pra entrar em contato
 public interface UsuarioClient {
-	
+
 	//entra contato com o usuario	
-	
-	@RequestMapping(method = RequestMethod.PUT, value = "/service/encerrar-registro")
-	boolean encerrarRegistro(EncerrarPedidoDto encPedido);
+
+
 
 }

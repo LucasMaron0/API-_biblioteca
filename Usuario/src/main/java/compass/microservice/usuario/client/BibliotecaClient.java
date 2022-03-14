@@ -27,8 +27,7 @@ import compass.microservice.usuario.controller.dto.RegistroDto;
 public interface BibliotecaClient {
 	// entra contato com a biblioteca
 
-	@RequestMapping(method = RequestMethod.POST, value = "/service/teste")
-	RetornoRequestTesteDto teste(@Valid TesteForm form);
+
 
 	@RequestMapping(method = RequestMethod.POST, value = "/service/pedido")
 	RetornoPedidoDto pedirLivros(@Valid PedirLivroForm form, @RequestHeader("Authorization") String token);

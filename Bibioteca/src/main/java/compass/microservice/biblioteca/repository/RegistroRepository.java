@@ -18,5 +18,8 @@ public interface RegistroRepository extends JpaRepository<Registro, Long> {
 	List<Registro> findAllByIdUsuario(Long idUsuario);
 
 	List<Registro> findByStatusRegistro(StatusRegistro emAndamento);
-
+	
+	Page<Registro> findByBiblioteca_id(Long id, Pageable paginacao);
+	
+	
 }

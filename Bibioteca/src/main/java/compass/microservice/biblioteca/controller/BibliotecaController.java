@@ -1,6 +1,7 @@
 package compass.microservice.biblioteca.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -28,6 +29,8 @@ import compass.microservice.biblioteca.controller.dto.LivroDto;
 import compass.microservice.biblioteca.controller.form.CadastrarBibliotecaForm;
 import compass.microservice.biblioteca.modelos.Biblioteca;
 import compass.microservice.biblioteca.modelos.Livro;
+import compass.microservice.biblioteca.modelos.Registro;
+import compass.microservice.biblioteca.modelos.StatusRegistro;
 import compass.microservice.biblioteca.repository.BibliotecaRepository;
 import compass.microservice.biblioteca.repository.LivrosRepository;
 import compass.microservice.biblioteca.repository.RegistroRepository;
@@ -46,6 +49,7 @@ public class BibliotecaController {
 	private RegistroRepository rRepo;
 
 	@PostMapping
+	@PreAuthorize("hasRole('ROLE_BIBLIOTECA')")
 	@Transactional
 	public ResponseEntity<BibliotecaDto> cadastrarBiblioteca(@RequestBody @Valid CadastrarBibliotecaForm form,
 			UriComponentsBuilder uriBuilder) {
@@ -96,6 +100,7 @@ public class BibliotecaController {
 	}
 
 	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_BIBLIOTECA')")
 	@Transactional
 	public ResponseEntity<BibliotecaDto> atualizar(@PathVariable Long id,
 			@RequestBody @Valid CadastrarBibliotecaForm form) {
@@ -115,8 +120,19 @@ public class BibliotecaController {
 	public ResponseEntity<?> remover(@PathVariable Long id) {
 		Optional<Biblioteca> optional = bRepo.findById(id);
 		if (optional.isPresent()) {
-			bRepo.deleteById(id);
-			return ResponseEntity.ok().build();
+			List<Registro> registros = rRepo.findByBiblioteca_id(id, null).getContent();
+			boolean deletavel = true;
+			for (Registro r : registros) {
+				if(r.getStatusRegistro().equals(StatusRegistro.EM_ANDAMENTO)) {
+					deletavel = false;
+				}
+			}
+			if (deletavel) {
+				bRepo.deleteById(id);
+				return ResponseEntity.ok().build();
+			}else {
+				return ResponseEntity.badRequest().body("Não é possível deletar bibliotecas com pedios em andamento.");
+			}
 		}
 
 		return ResponseEntity.notFound().build();

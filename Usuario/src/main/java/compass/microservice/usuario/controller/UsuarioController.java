@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,16 +54,8 @@ public class UsuarioController {
 	@Autowired
 	private UsuarioRepository uRepo;
 
-	@PostMapping("/service-teste")
-	@Transactional
-	public ResponseEntity<RetornoRequestTesteDto> cadastrar(@RequestBody @Valid TesteForm form) {
-
-		RetornoRequestTesteDto retorno = uService.teste(form);
-
-		return ResponseEntity.ok(retorno);
-	}
-
 	@PostMapping
+	@PreAuthorize("hasRole('ROLE_USUARIO')")
 	@Transactional
 	public ResponseEntity<?> cadastrarUsuario(@RequestBody @Valid CadastrarUsuarioForm form,
 			UriComponentsBuilder uriBuilder) {
@@ -76,6 +69,7 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/pedido")
+	@PreAuthorize("hasRole('ROLE_USUARIO')")
 	@Transactional
 	public ResponseEntity<?> pedirlivro(@RequestHeader("Authorization") String token,
 			@RequestBody @Valid PedirLivroForm form) {
@@ -126,7 +120,6 @@ public class UsuarioController {
 	}
 
 	@GetMapping("/buscarLivroProximo/{id}")
-
 	public ResponseEntity<?> buscarLivroProximo(@PathVariable long id, @RequestBody BuscarNomeLivrosForm nomeLivros) {
 
 		Optional<Usuario> op = uRepo.findById(id);
@@ -185,6 +178,7 @@ public class UsuarioController {
 	}
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_USUARIO')")
 	@Transactional
 	public ResponseEntity<?> remover(@RequestHeader("Authorization") String token, @PathVariable Long id) {
 		Optional<Usuario> optional = uRepo.findById(id);

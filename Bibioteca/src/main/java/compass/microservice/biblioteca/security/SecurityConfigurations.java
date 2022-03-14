@@ -49,11 +49,6 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 	}
 
 
-	public static void main(String[]args) {
-		System.out.println(new BCryptPasswordEncoder().encode("121212"));
-	}
-
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()

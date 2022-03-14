@@ -30,10 +30,6 @@ public class BibliotecaServiceController {
 	@Autowired
 	private BibliotecaService bService;
 
-	@RequestMapping(method = RequestMethod.POST, value = "/teste")
-	public ResponseEntity<RequestTesteDTO> teste(@RequestBody RequestTesteForm form) {
-		return bService.teste(form);
-	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/pedido")
 	public ResponseEntity<RetornoPedidoDto> pedirLivros(@RequestBody RequestPedirLivros form,

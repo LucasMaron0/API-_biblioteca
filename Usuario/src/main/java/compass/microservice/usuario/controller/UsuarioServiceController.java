@@ -18,10 +18,5 @@ public class UsuarioServiceController {
 
 	//responde requisiçoes de serviço  da biblioteca
 	
-	@RequestMapping(method = RequestMethod.PUT, value ="/encerrar-registro")
-	public boolean encerrarRegistro(@RequestBody EncerrarPedidoDto encPedido) {
-		
-		return uService.encerrarRegistro(encPedido);
-	}
 	
 }

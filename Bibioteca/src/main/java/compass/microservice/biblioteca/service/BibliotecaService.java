@@ -83,24 +83,12 @@ public class BibliotecaService {
 
 		EncerrarPedidoDto encPedido = new EncerrarPedidoDto(registro.getIdUsuario(), registro.getId(), "encerrado");
 
-		boolean b = uClient.encerrarRegistro(encPedido);
+		return ResponseEntity.ok(encPedido);
 
-		if (b) {
-			return ResponseEntity.ok(encPedido);
-		} else {
-			return ResponseEntity.ok("erro");
-		}
 
 	}
 
 	// Recebe (da BibliotecaServiceController que recebe do Usuario)
-	public ResponseEntity<RequestTesteDTO> teste(RequestTesteForm form) {
-
-		String mensagemRetorno = form.getNome() + "---OK--- mensagem  processada pela  biblioteca";
-		RequestTesteDTO teste = new RequestTesteDTO(form.getNome(), form.getMensagem(), mensagemRetorno);
-
-		return ResponseEntity.ok(teste);
-	}
 
 	public ResponseEntity<RetornoPedidoDto> pedirLivros(RequestPedirLivros form) {
 
@@ -252,16 +240,16 @@ public class BibliotecaService {
 			}
 		}
 
-		
+
 
 		for (String s: form.getNomeLivros()) {
 			List<Livro> livros = lRepo.findByNome(s);
 			Livro livroMaisProximo = null;
 
 			boolean emBbComPedidoEmAndamento = false;
-			
+
 			System.out.println(livros.size());
-			
+
 			if (!bibliosComPedidosEmAndamento.isEmpty()) {
 				if (!livros.isEmpty()) {
 					Iterator<Livro> i = livros.iterator();
@@ -277,7 +265,7 @@ public class BibliotecaService {
 			}
 
 			System.out.println(livros.size());
-			
+
 			if (livros.size()>1) {
 				Optional<Livro> opLivroMaisProximo = Optional.ofNullable(loc.livroMaisProximo(usuarioEnd, livros, false));
 				if(opLivroMaisProximo.isPresent()) {

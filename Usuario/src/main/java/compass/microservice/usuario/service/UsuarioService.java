@@ -37,12 +37,7 @@ public class UsuarioService {
 
 	//Manda
 
-	public RetornoRequestTesteDto teste(@Valid TesteForm form) {
 
-		RetornoRequestTesteDto retorno = bClient.teste(form);
-
-		return retorno;
-	}
 
 	public RetornoPedidoDto pedirLivros(@Valid PedirLivroForm form, String token) {
 
@@ -81,19 +76,6 @@ public class UsuarioService {
 		return bClient.pedidoAvancado(form, token);
 	}
 	//Recebe
-
-	public boolean encerrarRegistro(EncerrarPedidoDto encPedido) {
-		Optional<Usuario> optUsuario = uRepo.findById(encPedido.getIdUser());
-		if (optUsuario.isPresent()) {
-			return true;
-		}else {
-			return false;
-		}
-	}
-
-
-
-
 
 
 }
