@@ -81,23 +81,6 @@ public class BibliotecaController {
 		}
 	}
 
-	@GetMapping("/nomeAutor/{autor}")
-	public ResponseEntity<LivroDto> buscarPorAutor(@PathVariable String autor) {
-		Optional<Livro> optional = lRepo.findByAutorContainingIgnoreCase(autor);
-		if (optional.isPresent()) {
-			return ResponseEntity.ok(new LivroDto(optional.get()));
-		}
-		return ResponseEntity.notFound().build();
-	}
-
-	@GetMapping("/nomeLivro/{nome}")
-	public ResponseEntity<LivroDto> buscarPorNomeLivro(@PathVariable String nome) {
-		Optional<Livro> optional = lRepo.findByNomeContainingIgnoreCase(nome);
-		if (optional.isPresent()) {
-			return ResponseEntity.ok(new LivroDto(optional.get()));
-		}
-		return ResponseEntity.notFound().build();
-	}
 
 	@PutMapping("/{id}")
 	@PreAuthorize("hasRole('ROLE_BIBLIOTECA')")
