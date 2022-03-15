@@ -17,7 +17,7 @@ public class CadastrarUsuarioForm {
 
 	@NotNull(message = "Escolher um Estado válido")
 	private Estado estado;
-
+	
 	@NotBlank(message = "Inserir o nome da Cidade")
 	private String cidade;
 

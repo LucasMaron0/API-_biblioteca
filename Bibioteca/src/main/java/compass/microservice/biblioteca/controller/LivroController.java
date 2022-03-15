@@ -77,21 +77,23 @@ public class LivroController {
 	}
 
 	@GetMapping("/nomeAutor/{autor}")
-	public ResponseEntity<LivroDto> buscarPorAutor(@PathVariable String autor) {
-		Optional<Livro> optional = lRepo.findByAutorContainingIgnoreCase(autor);
-		if (optional.isPresent()) {
-			return ResponseEntity.ok(new LivroDto(optional.get()));
-		}
-		return ResponseEntity.notFound().build();
+	public Page<LivroDto> buscarPorAutor(@PathVariable String autor,
+			@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao) {
+		Page<Livro> livros = lRepo.findByAutorContainingIgnoreCase(autor, paginacao);
+
+		return LivroDto.converter(livros);
+
+
 	}
 
 	@GetMapping("/nomeLivro/{nome}")
-	public ResponseEntity<LivroDto> buscarPorNomeLivro(@PathVariable String nome) {
-		Optional<Livro> optional = lRepo.findByNomeContainingIgnoreCase(nome);
-		if (optional.isPresent()) {
-			return ResponseEntity.ok(new LivroDto(optional.get()));
-		}
-		return ResponseEntity.notFound().build();
+	public Page<LivroDto> buscarPorNomeLivro(@PathVariable String nome,
+			@PageableDefault(sort="id", direction= Direction.ASC,page=0, size=10)Pageable paginacao) {
+		Page<Livro> livros = lRepo.findByNomeContainingIgnoreCase(nome, paginacao);
+
+		return  LivroDto.converter(livros);
+
+
 	}
 
 	@PostMapping("/cadastrar")

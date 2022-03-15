@@ -248,7 +248,7 @@ public class BibliotecaService {
 
 			boolean emBbComPedidoEmAndamento = false;
 
-			System.out.println(livros.size());
+			
 
 			if (!bibliosComPedidosEmAndamento.isEmpty()) {
 				if (!livros.isEmpty()) {
@@ -257,14 +257,14 @@ public class BibliotecaService {
 						Livro l = i.next();
 						if (bibliosComPedidosEmAndamento.contains(l.getBiblioteca().getId())) {
 							i.remove();
-							System.out.println("i =" + i);
+							
 							emBbComPedidoEmAndamento = true;
 						}
 					}
 				}
 			}
 
-			System.out.println(livros.size());
+			
 
 			if (livros.size()>1) {
 				Optional<Livro> opLivroMaisProximo = Optional.ofNullable(loc.livroMaisProximo(usuarioEnd, livros, false));

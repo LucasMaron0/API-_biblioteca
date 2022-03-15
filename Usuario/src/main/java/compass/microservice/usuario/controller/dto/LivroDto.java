@@ -13,12 +13,10 @@ public class LivroDto {
 	private String autor;
 	private String categoria;
 	private String editora;
-	private LocalDate lançamento;
+	private LocalDate lancamento;
+	private String status;
 
 	private String biblioteca;
-
-
-
 
 
 	public LivroDto() {
@@ -58,11 +56,11 @@ public class LivroDto {
 	}
 
 	public LocalDate getLançamento() {
-		return lançamento;
+		return lancamento;
 	}
 
 	public void setLançamento(LocalDate lançamento) {
-		this.lançamento = lançamento;
+		this.lancamento = lançamento;
 	}
 
 	public String getBiblioteca() {
@@ -81,7 +79,23 @@ public class LivroDto {
 		this.categoria = categoria;
 	}
 
+	public LocalDate getLancamento() {
+		return lancamento;
+	}
 
+	public void setLancamento(LocalDate lancamento) {
+		this.lancamento = lancamento;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	
 	
 
 

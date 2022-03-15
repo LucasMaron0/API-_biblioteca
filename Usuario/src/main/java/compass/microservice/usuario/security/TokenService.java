@@ -34,7 +34,7 @@ public class TokenService {
 		
 		for(GrantedAuthority authority : authorities) {
 			roles.add(authority.getAuthority());
-			System.out.println(authority.getAuthority());
+	
 		}
 
 		return Jwts.builder()

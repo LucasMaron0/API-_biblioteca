@@ -1,12 +1,15 @@
 package compass.microservice.usuario.controller.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class RegistroDto {
 
 	private Long id;
 
 	private Long idUsuario;
+	
+	private Long idBiblioteca;
 
 	private String statusRegistro;
 
@@ -15,6 +18,8 @@ public class RegistroDto {
 	private LocalDate dataVencimento;
 	
 	private double multaGerada;
+	
+	private List<String> livros;
 
 	public RegistroDto() {
 
@@ -67,6 +72,22 @@ public class RegistroDto {
 	public void setMultaGerada(double multaGerada) {
 		this.multaGerada = multaGerada;
 	}
-	
 
+	public Long getIdBiblioteca() {
+		return idBiblioteca;
+	}
+
+	public void setIdBiblioteca(Long idBiblioteca) {
+		this.idBiblioteca = idBiblioteca;
+	}
+
+	public List<String> getLivros() {
+		return livros;
+	}
+
+	public void setLivros(List<String> livros) {
+		this.livros = livros;
+	}
+	
+	
 }
