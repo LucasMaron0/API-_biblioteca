@@ -2,7 +2,7 @@ package compass.microservice.usuario.controller.dto;
 
 public class EndBibliotecaDto {
 
-
+	private Long id;
 	private String nome;
 	private String estado;
 	private String cidade;
@@ -76,6 +76,16 @@ public class EndBibliotecaDto {
 	}
 
 
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
 	
 
 

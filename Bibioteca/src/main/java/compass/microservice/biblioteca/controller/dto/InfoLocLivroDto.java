@@ -23,7 +23,7 @@ public class InfoLocLivroDto {
 		
 		this.idLivro = l.getId();
 		this.nomeLivro = l.getNome();
-		this.nomeBiblioteca= bb.getNome();
+		this.nomeBiblioteca= "(ID:"+bb.getId()+") "+bb.getNome();
 		
 		
 		this.endBiblioteca = bb.getEndereco().getEstado().toString()

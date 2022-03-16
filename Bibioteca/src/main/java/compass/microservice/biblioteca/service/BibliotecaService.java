@@ -124,7 +124,9 @@ public class BibliotecaService {
 
 				if (livro.isPresent() && livro.get().getStatusLivro().equals(StatusLivro.DISPONIVEL)) {
 					livrosPedido.add(livro.get());
-					livrosDisponiveis.add(livro.get().getNome());
+					livrosDisponiveis.add("(ID:"+livro.get().getId()+") "+livro.get().getNome()+" - "
+					+"(ID:"+livro.get().getBiblioteca().getId()+") "+ livro.get().getBiblioteca().getNome());
+						
 
 				} else {
 					livrosIndisponiveis.add(id);

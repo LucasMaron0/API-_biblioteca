@@ -26,7 +26,7 @@ public class RegistroDto {
 
 	private List<String> livros;
 
-	private double multaGerada;
+	private double multaGerada = 0.0;
 
 
 
@@ -41,7 +41,7 @@ public class RegistroDto {
 		this.statusRegistro = registro.getStatusRegistro();
 		this.dataLocacao = registro.getDataLocacao();
 		this.dataVencimento = registro.getDataVencimento();
-		this.multaGerada = registro.multaGerada();
+		this.multaGerada = registro.getMultaGerada();
 		
 		List<String> nomes = new ArrayList<>();
 		for(Livro l:registro.getLivros()) {

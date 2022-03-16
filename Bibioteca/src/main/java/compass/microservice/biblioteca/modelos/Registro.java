@@ -1,5 +1,6 @@
 package compass.microservice.biblioteca.modelos;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -44,7 +45,7 @@ public class Registro {
 	
 	private LocalDate dataVencimento;
 	
-	private Double multaGerada;	
+	private Double multaGerada= 0.0;	
 	
 	public Registro () {
 		
@@ -140,8 +141,7 @@ public class Registro {
 	
 	public Double multaGerada() {
 		if(LocalDate.now().isAfter(dataVencimento)) {
-			int diasAtraso = LocalDate.now().compareTo(dataVencimento);
-			System.out.println(diasAtraso);
+			Long diasAtraso = ChronoUnit.DAYS.between(dataVencimento, LocalDate.now());
 			Double multa = diasAtraso * 0.75;
 			return multa;
 		}

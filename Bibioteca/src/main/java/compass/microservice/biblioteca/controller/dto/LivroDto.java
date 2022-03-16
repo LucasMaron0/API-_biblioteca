@@ -27,7 +27,7 @@ public class LivroDto {
 		this.categoria = livro.getCategoria();
 		this.editora = livro.getEditora();
 		this.lancamento= livro.getLancamento();
-		this.biblioteca = livro.getBiblioteca().getNome();
+		this.biblioteca =livro.getBiblioteca().getNome();
 		this.status = livro.getStatusLivro().toString();
 
 	}
